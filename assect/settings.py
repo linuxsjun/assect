@@ -87,7 +87,8 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         # 'HOST': '192.168.8.43',
-        'HOST': '172.18.0.32',
+        # 'HOST': '172.18.0.32',
+        'HOST': 'dpsql.test.com',
         'PORT': '5432',
     }
     # 'default': {

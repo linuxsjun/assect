@@ -82,12 +82,14 @@
                                 <th class="border-right" data-id="sid">姓名<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="0"></i></th>
                                 <th class="border-right" data-id="name">部门<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="1"></i></th>
                                 <th class="border-right" data-id="name">规则<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="1"></i></th>
-                                <th class="border-right" data-id="specifications">最早 | 最晚<i class="" aria-hidden="true" data-id="0"></i></th>
+                                <th class="border-right" data-id="specifications">最早<i class="" aria-hidden="true" data-id="0"></i></th>
+                                <th class="border-right" data-id="specifications">最晚<i class="" aria-hidden="true" data-id="0"></i></th>
                                 <th class="border-right" data-id="name">次数<i class="" aria-hidden="true" data-id="1"></i></th>
                                 <th class="border-right" data-id="warranty">工时<i class="" aria-hidden="true" data-id="0"></i></th>
                                 <th class="border-right" data-id="sn">审批单<i class="" aria-hidden="true" data-id="0"></i></th>
                                 <th class="border-right" data-id="sn">状态<i class="" aria-hidden="true" data-id="0"></i></th>
-                                <th class="border-right" data-id="sn">校准<i class="" aria-hidden="true" data-id="0"></i></th>
+                                <th class="text-right" data-id="act"><i class="fa fa-align-justify" aria-hidden="true" data-id="0"></i></th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -96,12 +98,13 @@
                                     <th>{{ item.name | title }} ({{ item.pin| safe }})</th>
                                     <td>{{ item.employee_department__departmentid__name }}</td>
                                     <td>白天班</td>
-                                    <td>{{ item.fast | date:"H:i" }} | {{ item.last | date:"H:i" }}</td>
+                                    <td>{{ item.fast | date:"H:i" }}</td>
+                                    <td>{{ item.last | date:"H:i" }}</td>
                                     <td>{{ item.count| default:"-"}}</td>
                                     <td>{{ item.long | default:"-"}}</td>
                                     <td>2</td>
                                     <td>OK</td>
-                                    <td>无</td>
+                                    <td class="text-right text-muted"><i class="fa fa-list" aria-hidden="true" data-id="0"></i></td>
                                 </tr>
                             {% empty %}
                                 <tr>

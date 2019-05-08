@@ -16,13 +16,13 @@ def index(request):
     context['title'] = '签到'
 
 
+    # daystart = datetime.datetime.strptime('2019-5-7', '%Y-%m-%d')
+    # daytoday = datetime.datetime.strptime('2019-5-7', '%Y-%m-%d')
+    daytoday = datetime.datetime.today()
 
-    daystart = datetime.datetime.strptime('2019-5-7', '%Y-%m-%d')
-    daytoday = datetime.datetime.strptime('2019-4-27', '%Y-%m-%d')
-
-    ps = checkinout.objects.filter(checktime__year=daystart.year,
-                                   checktime__month=daystart.month,
-                                   checktime__day=daystart.day).values().order_by('-checktime')
+    ps = checkinout.objects.filter(checktime__year=daytoday.year,
+                                   checktime__month=daytoday.month,
+                                   checktime__day=daytoday.day).values().order_by('-checktime')
     emppins = employee.objects.exclude(extemployeeatt__pin=None).order_by('employee_department__departmentid__name', 'name').values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
     pinsdict = {}
     for i in emppins:
@@ -37,15 +37,13 @@ def index(request):
     context['context'] = p
 
 
-
-
     p = []
     emppins = employee.objects.exclude(extemployeeatt__pin=None).order_by('employee_department__departmentid__name', 'name').values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
     for emppin in emppins:
         body = emppin['extemployeeatt__pin']
-        ps = checkinout.objects.filter(checktime__year=daystart.year,
-                                       checktime__month=daystart.month,
-                                       checktime__day=daystart.day,
+        ps = checkinout.objects.filter(checktime__year=daytoday.year,
+                                       checktime__month=daytoday.month,
+                                       checktime__day=daytoday.day,
                                        pin=body)\
             .values('pin')\
             .annotate(last=Max('checktime'), fast=Min('checktime'), count=Count('userid'))
