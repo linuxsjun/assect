@@ -1,0 +1,697 @@
+{% extends "base.html" %}
+
+{% block styecss %}
+
+{% endblock styecss %}
+
+{% block jquery %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".fa-list").click(function () {
+                $('#imglist').modal('show');
+            });
+        });
+    </script>
+{% endblock jquery%}
+
+{% block mainbody %}
+    <!--<div class="view_form"> -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2 border-right">
+                {% include 'hr_sub_sidemenu.html' %}
+            </div>
+            <div class="col-10">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row">
+                            <h3 class="col-sm-6">{{ title }}</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!--工具条-->
+                                <button type="button" class="btn btn-primary sr-only" data-dis="display" data-toggle="edit">编辑</button>
+                                <button type="button" class="btn btn-outline-secondary sr-only" data-dis="display" data-toggle="del">删除</button>
+                                <button type="button" class="btn btn-primary sr-only" data-dis="edit" data-toggle="save">保存</button>
+                                <button type="button" class="btn btn-outline-secondary" data-toggle="goback">返回</button>
+                            </div>
+                            <div class="col-sm-4">
+                                <!--导入导出条-->
+                                <div class="btn-group">
+                                    <div class="btn-group dropdown">
+                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                            打印
+                                            <span class="caret"></span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#">信息单</a>
+                                            <a class="dropdown-item" href="#">基本信息</a>
+                                        </div>
+                                    </div>
+                                    <div class="btn-group dropdown">
+                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                            动作
+                                            <span class="caret"></span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="/property_form/?act=create&id={{ pk }}">复制</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">同步到企业微信</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <!--导航条-->
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-end">
+                                        <li class="page-item">
+                                            <a class="page-link" href="/property_form/?act=display&id={{ ppk }}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item disabled"><a class="page-link"><span id="assetid">{{ pk|default:0 }}</span>/{{ spk|default:0 }}</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="/property_form/?act=display&id={{ npk }}" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <form class="col-12" action="#" method="post" enctype="multipart/form-data" name="accset_form" id="headerimgform">
+                        {% csrf_token %}
+                        <input name="act" id="act" value="{{ act }}" type="hidden">
+
+                        <div class="row shadow border-top border-bottom py-2">
+                            <div class="col-auto ml-3 mr-auto">
+                                <button type="button" class="btn btn-outline-primary btn-sm">提交</button>
+                                <button type="button" class="btn btn-outline-warning sr-only" disabled="True">借用</button>
+                                <button type="button" class="btn btn-outline-dark sr-only" disabled="True">退还</button>
+                                <button type="button" class="btn btn-outline-info btn-sm">生成</button>
+                                <button type="button" class="btn btn-outline-danger btn-sm">计算</button>
+                            </div>
+                            <div class="col-auto">
+                                <span>
+                                    {% if context.status  %}
+                                        {% if context.status == 1 %}
+                                        <h6 href="#" class="badge badge-secondary">闲置</h6>
+                                        {% endif %}
+                                        {% if context.status == 2 %}
+                                        <a href="#" class="badge badge-success"><h6 class="my-0">在用</h6></a>
+                                        {% endif %}
+                                        {% if context.status == 3 %}
+                                        <a href="#" class="badge badge-warning"><h6 class="my-0">维修</h6></a>
+                                        {% endif %}
+                                        {% if context.status == 4 %}
+                                        <a href="#" class="badge badge-danger"><h6 class="my-0">报废</h6></a>
+                                        {% endif %}
+                                    {% else %}
+                                        <a href="#" class="badge badge-secondary"><h6 class="my-0">草稿</h6></a>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="container shadow border p-3 rounded my-3">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-sm-7 mb-3">
+                                        <h4>2019年1月出勤表</h4>
+                                    </div>
+                                    <div class="col-sm-4 mb-3">
+                                        <div class="btn-group" role="group">
+                                            <div class="btn-group" role="group">
+                                                {% if context.active == 1 %}
+                                                    <button type="button" class="btn btn-outline-secondary" data-toggle="active" data-val="1">
+                                                        <i class="fa fa-archive fa-1x"></i> 归档
+                                                    </button>
+                                                {% else %}
+                                                    <button type="button" class="btn btn-outline-secondary" data-toggle="active" data-val="0">
+                                                        <i class="fa fa-archive fa-1x"></i> 取档
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                                                    <i class="fa fa-paperclip fa-1x"></i>
+                                                    附件
+                                                    <span class="badge badge-secondary">9</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group form-row col-sm mb-2">
+                                            <label class="col-sm-1 col-form-label text-right pr-3 border-right" for="name">开始</label>
+                                            <div class="col-sm-2">
+                                                <input class="form-control" type="date" name="address" id="address" value="">
+                                            </div>
+                                            <label class="col-sm-1 col-form-label text-right pr-3 border-right" for="name">结束</label>
+                                            <div class="col-sm-2">
+                                                <input class="form-control" type="date" name="address" id="address" value="">
+                                            </div>
+                                            <label class="col-sm-1 col-form-label text-right pr-3 border-right" for="name">制表</label>
+                                            <div class="col-sm-2">
+                                                <input class="form-control" type="text" name="emploer" id="address" value="XXXX">
+                                            </div>
+                                            <label class="col-sm-1 col-form-label text-right pr-3 border-right" for="name">部门</label>
+                                            <div class="col-sm-2">
+                                                <input class="form-control" type="text" name="emploer" id="address" value="三维制作部">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table table-hover mt-3 border-bottom">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th class="border-right" data-id="sid">姓名<i class="" aria-hidden="true" data-id="0"></i></th>
+                                            <th class="border-right" data-id="name">部门<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="1"></i></th>
+                                            <th class="border-right" data-id="name">全勤 | 出勤(天)<i class="" aria-hidden="true" data-id="1"></i></th>
+                                            <th class="border-right" data-id="specifications">迟到|早退(次)<i class="" aria-hidden="true" data-id="0"></i></th>
+                                            <th class="border-right" data-id="name">缺勤(天)<i class="" aria-hidden="true" data-id="1"></i></th>
+                                            <th class="border-right" data-id="warranty">事假(时)<i class="" aria-hidden="true" data-id="0"></i></th>
+                                            <th class="border-right" data-id="sn">年假(天)<i class="" aria-hidden="true" data-id="0"></i></th>
+                                            <th class="border-right" data-id="sn">病假(时)<i class="" aria-hidden="true" data-id="0"></i></th>
+                                            <th class="border-right" data-id="sn">状态<i class="" aria-hidden="true" data-id="0"></i></th>
+                                            <th class="border-right" data-id="sn">评分<i class="" aria-hidden="true" data-id="0"></i></th>
+                                            <th class="border-right" data-id="sn">校准<i class="" aria-hidden="true" data-id="0"></i></th>
+                                            <th class="text-center" data-id="act"><i class="fa fa-align-justify" aria-hidden="true" data-id="0"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+{#                                        {% for item in context %}#}
+                                            <tr class="sr-only">
+                                                <td>{{ item.name | title }} ({{ item.pin| safe }})</td>
+                                                <td>{{ item.employee_department__departmentid__name }}</td>
+                                                <td>白天班</td>
+                                                <td>{{ item.fast | date:"H:i" }} | {{ item.last | date:"H:i" }}</td>
+                                                <td>{{ item.count| default:"-"}}</td>
+                                                <td>{{ item.long | default:"-"}}</td>
+                                                <td>2</td>
+                                                <td>OK</td>
+                                                <td>无</td>
+                                                <td class="text-danger">草稿</td>
+                                                <td><i class="fa fa-trash" aria-hidden="true" data-id="0"></i></td>
+                                            </tr>
+                                            <tr>
+                                                <th>宋佳泉</th>
+                                                <td>三维制作部</td>
+                                                <td>24 | 22.7</td>
+                                                <td>- | -</td>
+                                                <td>6</td>
+                                                <td>3</td>
+                                                <td>2</td>
+                                                <td>2</td>
+                                                <td class="text-success">OK</td>
+                                                <td class="text-success">90</td>
+                                                <td>完成</td>
+                                                <td>
+                                                    <i class="fa fa-list mr-3" aria-hidden="true" data-id="0"></i>
+                                                    <i class="fa fa-trash" aria-hidden="true" data-id="0"></i>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>陈望</th>
+                                                <td>三维制作部</td>
+                                                <td>24 | 22.7</td>
+                                                <td>6 | 2</td>
+                                                <td>6</td>
+                                                <td>3</td>
+                                                <td>2</td>
+                                                <td>2</td>
+                                                <td class="text-warning">Warning</td>
+                                                <td class="text-warning">70</td>
+                                                <td class="text-success">完成</td>
+                                                <td>
+                                                    <i class="fa fa-list mr-3" aria-hidden="true" data-id="0"></i>
+                                                    <i class="fa fa-trash" aria-hidden="true" data-id="0"></i>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>张三</th>
+                                                <td>三维制作部</td>
+                                                <td>24 | 22.7</td>
+                                                <td>6 | 2</td>
+                                                <td>6</td>
+                                                <td>3</td>
+                                                <td>2</td>
+                                                <td>2</td>
+                                                <td class="text-danger">Danger</td>
+                                                <td class="text-danger">50</td>
+                                                <td class="text-danger">草稿</td>
+                                                <td>
+                                                    <i class="fa fa-list mr-3" aria-hidden="true" data-id="0"></i>
+                                                    <i class="fa fa-trash" aria-hidden="true" data-id="0"></i>
+                                                </td>
+                                            </tr>
+{#                                        {% empty %}#}
+                                            <tr>
+                                                <td colspan="13" style="text-align: center;">(暂无数据)</td>
+                                            </tr>
+{#                                        {% endfor %}#}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 记录 -->
+                <div class="row justify-content-center border-top sr-only">
+                    <div class="col-8">
+                        <p class="text-center">分配记录</p>
+                        <div class="media mt-2">
+                            <img src="" alt="" data-src="holder.js/48x48" class="mr-3">
+                            <div class="media-body bg-light">
+                                <h5>记录一</h5>
+                                <p>这是一条记录</p>
+                            </div>
+                        </div>
+                        <div class="media mt-2">
+                            <img src="" alt="" data-src="holder.js/48x48" class="mr-3">
+                            <div class="media-body bg-light">
+                                <h5>记录二</h5>
+                                <p>这是一条记录</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 出勤个人详细对话框 -->
+        <div class="modal fade" id="imglist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">详细: XXXX</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body pt-0">
+
+
+                        <div class="row shadow-sm border-bottom py-1">
+                            <div class="col-auto mr-auto">
+                                <button type="button" class="btn btn-primary btn-sm">确认</button>
+                                <button type="button" class="btn btn-outline-primary btn-sm">取消</button>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-danger btn-sm">计算</button>
+                            </div>
+                        </div>
+
+
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-sm-7 mb-3">
+                                <h4>XXXXXX</h4>
+                                <h4>部门</h4>
+                            </div>
+                        </div>
+
+                        <!-- 下面是Tabs-->
+                        <div>
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item"><a class="nav-link  active" href="#subtotal" data-toggle="tab">每日小计</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#detail" data-toggle="tab">假单明细</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#aaaa" data-toggle="tab">排班明细</a></li>
+                            </ul>
+                            <div class="tab-content border-bottom pt-3">
+                                <div class="tab-pane active" id="subtotal">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="text-info pl-3">签到天数</h5>
+                                            <table class="table table-sm table-hover border-bottom mt-3">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th class="border-right" data-id="sid">日期<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="0"></i></th>
+                                                        <th class="border-right" data-id="name">班次<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="1"></i></th>
+                                                        <th class="border-right" data-id="name">签到<i class="" aria-hidden="true" data-id="1"></i></th>
+                                                        <th class="border-right" data-id="specifications">最早 | 最晚<i class="" aria-hidden="true" data-id="0"></i></th>
+                                                        <th class="border-right" data-id="warranty">工时<i class="" aria-hidden="true" data-id="0"></i></th>
+                                                        <th class="border-right" data-id="sn">审批单<i class="" aria-hidden="true" data-id="0"></i></th>
+                                                        <th class="border-right" data-id="sn">状态<i class="" aria-hidden="true" data-id="0"></i></th>
+                                                        <th class="border-right" data-id="act"><i class="fa fa-align-justify" aria-hidden="true" data-id="0"></i><i class="" aria-hidden="true" data-id="0"></i></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+{#                                                    {% for item in context %}#}
+                                                        <tr class="sr-only">
+                                                            <td>{{ item.name | title }} ({{ item.pin| safe }})</td>
+                                                            <td>{{ item.employee_department__departmentid__name }}</td>
+                                                            <td>白天班</td>
+                                                            <td>{{ item.fast | date:"H:i" }} | {{ item.last | date:"H:i" }}</td>
+                                                            <td>{{ item.count| default:"-"}}</td>
+                                                            <td>{{ item.long | default:"-"}}</td>
+                                                            <td>2</td>
+                                                            <td>OK</td>
+                                                            <td>无</td>
+                                                        </tr>
+                                                        <tr class="shadow-sm">
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>迟到:1 早退:1 未打卡:2 旷工:1 事假:1 病假:1 年假:1 调休:1 产假:1 ...</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr class="">
+                                                            <td>签到</td>
+                                                            <td colspan="10">
+                                                                <span class="badge badge-success mr-3">08:09:22</span>
+                                                                <span class="badge badge-danger mr-3">09:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-light mr-3">08:09:22</span>
+                                                                <span class="badge badge-success mr-3">18:09:22</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>白班</td>
+                                                            <td>4 次</td>
+                                                            <td>09:22 | 18:30</td>
+                                                            <td>5</td>
+                                                            <td>3</td>
+                                                            <td>OK</td>
+                                                            <td class="text-muted"><i class="fa fa-chevron-right" aria-hidden="true" data-id="0"></i></td>
+                                                        </tr>
+{#                                                    {% empty %}#}
+                                                        <tr>
+                                                            <td class="text-center" colspan="10">(暂无数据)</td>
+                                                        </tr>
+{#                                                    {% endfor %}#}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="detail">
+                                    <div class="row">
+                                        <div class="col">
+                                            <table class="table table-sm table-hover border-bottom mt-3">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th class="border-right" data-id="sid">日期<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="0"></i></th>
+                                                        <th class="border-right" data-id="name">原因<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="1"></i></th>
+                                                        <th class="border-right" data-id="name">类型<i class="" aria-hidden="true" data-id="1"></i></th>
+                                                        <th class="border-right" data-id="specifications">开始时间<i class="" aria-hidden="true" data-id="0"></i></th>
+                                                        <th class="border-right" data-id="specifications">结束时间<i class="" aria-hidden="true" data-id="0"></i></th>
+                                                        <th class="border-right" data-id="warranty">时长<i class="" aria-hidden="true" data-id="0"></i></th>
+                                                        <th class="border-right" data-id="sn">审批<i class="" aria-hidden="true" data-id="0"></i></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+{#                                                    {% for item in context %}#}
+                                                        <tr>
+                                                            <th>2019-04-01</th>
+                                                            <td>休休休休休休休休休休休休休休休...</td>
+                                                            <td>年假</td>
+                                                            <td>2019-3-4 09:22</td>
+                                                            <td>2019-3-5 18:30</td>
+                                                            <td>16 h</td>
+                                                            <td class="text-success">通过</td>
+                                                        </tr>
+{#                                                    {% empty %}#}
+                                                        <tr>
+                                                            <td class="text-center" colspan="6">(暂无数据)</td>
+                                                        </tr>
+{#                                                    {% endfor %}#}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="aaaa">
+                                    <div class="row">
+                                        <div class="col">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

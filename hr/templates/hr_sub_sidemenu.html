@@ -1,0 +1,63 @@
+<nav class="col-2 d-none d-md-block bg-light sidebar">
+    <div class="sidebar-sticky accordion" id="sidemenuhr">
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-primary">
+            <span><i class="fa fa-users fa-1x"></i> 员工</span>
+            <a class="d-flex align-items-center text-muted" href="#" >
+                <i class="fa fa-plus fa-1x"></i>
+            </a>
+        </h6>
+        <ul class="nav flex-column">
+            <li class="nav-item d-flex justify-content-between align-items-center px-3">
+                <a class="nav-link" href="{% url 'employee' %}">员工</a>
+            </li>
+        </ul>
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-primary">
+            <span><i class="fa fa-sitemap fa-1x"></i> 部门</span>
+            <a class="d-flex align-items-center text-muted" href="#">
+                <i class="fa fa-plus fa-1x"></i>
+            </a>
+        </h6>
+        <ul class="nav flex-column">
+            <li class="nav-item d-flex justify-content-between align-items-center px-3">
+                <a class="nav-link" href="{% url 'department' %}">部门</a>
+            </li>
+        </ul >
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-primary">
+            <span><i class="fa fa-sitemap fa-1x"></i> 考勤</span>
+            <a class="d-flex align-items-center text-muted" href="#">
+                <i class="fa fa-plus fa-1x"></i>
+            </a>
+        </h6>
+        <ul class="nav flex-column">
+            <li class="nav-item d-flex justify-content-between align-items-center px-3">
+                <a class="nav-link" href="{% url 'attendance:index' %}">签到</a>
+            </li>
+            <li class="nav-item d-flex justify-content-between align-items-center px-3">
+                <a class="nav-link" href="{% url 'attendance:summary' %}">出勤</a>
+            </li>
+            <li class="nav-item d-flex justify-content-between align-items-center px-3">
+                <a class="nav-link" href="{% url 'attendance:attclass' %}">排班</a>
+            </li>
+            <li class="nav-item d-flex justify-content-between align-items-center px-3">
+                <a class="nav-link" href="#">假期</a>
+            </li>
+        </ul >
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-primary">
+            <span><i class="fa fa-cog fa-1x"></i> 设置</span>
+            <a class="d-flex align-items-center text-muted" href="#">
+                <i class="fa fa-plus fa-1x"></i>
+            </a>
+        </h6>
+        <ul class="nav flex-column">
+            <li class="nav-item d-flex justify-content-between align-items-center px-3">
+                <a class="nav-link"  href="{% url 'attendance:config' %}">考勤</a>
+            </li>
+            <li class="nav-item d-flex justify-content-between align-items-center px-3">
+                <a class="nav-link"  href="{% url 'config_base' %}">常规</a>
+            </li>
+            <li class="nav-item d-flex justify-content-between align-items-center px-3">
+                <a class="nav-link"  href="{% url 'config_more' %}">高级</a>
+            </li>
+        </ul>
+    </div>
+</nav>

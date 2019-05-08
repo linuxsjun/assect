@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block styecss %}
+    <link rel="stylesheet" type="text/css" href="/static/css/base/base_conf.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/hr/view_hr_list.css">
+{% endblock styecss %}
+
+{% block mainbody %}
+    <div>
+        <div class="container-fluid border-bottom">
+            <div>
+                <h3>{{ title }}</h3>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <!--工具条-->
+                    <div>
+                        <button type="button" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-outline-secondary">取消</button>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <!--导入导出条-->
+                    <div class="dropdown sr-only">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            动作
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">打印</a></li>
+                            <li><a href="#">导出</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <article>
+            <form  class="form-horizontal" action="/conf" method="get" value=1>
+                <div class="container-fluid cmd_nav">
+                    <div class="row"></div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card mt-3 shadow-sm">
+                                <div class="card-header">
+                                    <h4 class="my-0 font-weight-normal">基本设置</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group col-sm form-row">
+                                        <label class="col-form-label" for="corpid">企业编码</label>
+                                        <input class="form-control" type="text" name="adder" id="adder" value="CP1684682D56W3E74S6E3SF">
+                                    </div>
+                                    <div class="form-group col-sm form-row">
+                                        <label class="col-form-label" for="corpid">公司名称</label>
+                                        <input class="form-control" type="text" name="name" id="name" value="武汉江通动画传媒股份有限公司">
+                                    </div>
+                                    <div class="form-group col-sm form-row">
+                                        <div class="col-8">
+                                        <label class="col-form-label" for="corpid">地址</label>
+                                        <input class="form-control" type="text" name="adder" id="adder" value="湖北省武汉市东湖开发区关山一路特1号光谷软件园F1栋19楼">
+                                        </div>
+                                        <div class="col-4">
+                                        <label class="col-form-label" for="corpid">邮政编码</label>
+                                        <input class="form-control" type="text" name="adder" id="adder" value="430057">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm form-row">
+                                        <div class="col-6">
+                                        <label class="col-form-label" for="corpid">电话</label>
+                                        <input class="form-control" type="text" name="adder" id="adder" value="027-59888600">
+                                        </div>
+                                        <div class="col-6">
+                                        <label class="col-form-label" for="corpid">传真</label>
+                                        <input class="form-control" type="text" name="fix" id="fix" value="027-59888699">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm form-row">
+                                        <div class="col-6">
+                                            <label class="col-form-label" for="corpid">网址</label>
+                                            <input class="form-control" type="text" name="adder" id="adder" value="www.jtacn.com">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="col-form-label" for="corpid">邮箱</label>
+                                            <input class="form-control" type="text" name="adder" id="adder" value="info@jtacn.com">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card mt-3 shadow-sm">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h4 class="my-0 font-weight-normal">开票信息</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group col-sm form-row">
+                                        <label class="col-form-label" for="corpid">税务登记证号</label>
+                                        <input class="form-control" type="text" value="91420100055749406G">
+                                    </div>
+                                    <div class="form-group col-sm form-row">
+                                        <label class="col-form-label" for="corpid">开户银行名称</label>
+                                        <input class="form-control" type="text" value="中信银行武汉光谷支行">
+                                    </div>
+                                    <div class="form-group col-sm form-row">
+                                        <label class="col-form-label" for="corpid">基本开户账号</label>
+                                        <input class="form-control" type="text" value="7382910182600005482">
+                                    </div>
+                                    <div class="form-group col-sm form-row">
+                                        <label class="col-form-label" for="corpid">注册场所地址</label>
+                                        <input class="form-control" type="text" value="武汉市洪山区光谷软件园F1栋19楼">
+                                    </div>
+                                    <div class="form-group col-sm form-row">
+                                        <label class="col-form-label" for="corpid">注册固定电话</label>
+                                        <input class="form-control" type="text" value="027-59888638">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card mt-3 shadow-sm">
+                                <div class="card-header">
+                                <div class="row">
+                                    <div class="col">
+                                        <h4 class="my-0 font-weight-normal">企业微信设置</h4>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-sm btn-outline-primary my-0 py-1" value="提交" data-toggle="savecorpid">保存</button>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group col-sm form-row">
+                                            <label class="col-form-label" for="corpid">CORPID:</label>
+                                            <input class="form-control" type="text" name="corpid" id="corpid" value="{{ context.corpid |default_if_none:"" }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card mt-3 shadow-sm">
+                                <div class="card-header">
+                                </div>
+                                <div class="card-body">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </article>
+        <div class="footbar">
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block jquery %}
+    <script src="/static/js/base/base_conf.js"></script>
+{% endblock jquery%}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>这是基础页</title>
+
+    <!-- Icon -->
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+    <!-- Graphs -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base/dashboard.css">
+
+    <link rel="stylesheet" type="text/css" href="/static/css/base/base.css">
+    {% block styecss %}{% endblock styecss %}
+</head>
+<body>
+   <header class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+       <div class="container">
+           <a class="navbar-brand p-0" href="/"><i class="fa fa-share-alt-square fa-2x" aria-hidden="true"></i></a>
+           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+           </button>
+           <div id="navbarSupportedContent" class="collapse navbar-collapse">
+               <ul class="navbar-nav mr-auto">
+                   <li class="nav-item dropdown">
+                       <a class="nav-link" href="/hr/" id="menu01">员工</a>
+                   </li>
+                   <li class="nav-item dropdown sr-only">
+                       <a class="nav-link" href="/property_list/" id="menu02">信息技术</a>
+                   </li>
+                   <li class="nav-item sr-only"><a class="nav-link" href="/search/" id="menu03">Dome</a></li>
+                   <li class="nav-item"><a class="nav-link" href="/conf/" id="menu04">设置</a></li>
+               </ul>
+               <ul class="navbar-nav navbar-right">
+                   <li class="nav-item dropdown">
+                       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           <i class="fa fa-user fa-1x"></i> {{ userinfo }}<span class="caret"></span>
+                       </a>
+                       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                           <a class="dropdown-item" href="#">个人信息</a>
+                           <div class="dropdown-divider"></div>
+                           <a class="dropdown-item" href="/signout/">注销<i class="fa fa-sign-out fa-1x"></i></a>
+                       </div>
+                   </li>
+               </ul>
+           </div>
+       </div>
+   </header>
+   <div class="clearfix">
+        {% block mainbody %}
+            <div class="container">
+{#                <img src="/static/img/backgroud.gif" width="100%" height="100%" atl="">#}
+                <div class="row">
+                    <div class="col-md-3 mt-3">
+                        <div class="card shadow">
+                            <div class="card-body text-center">
+                                <p class="text-success"><i class="fa fa-users fa-5x"></i></p>
+                                <h3><a class="text-dark" href="/hr/">人员</a></h3>
+                                <p>基本人员信息</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <div class="card shadow">
+                            <div class="card-body text-center">
+                                <p class="text-muted"><i class="fa fa-cubes fa-5x"></i></p>
+                                <h3><a class="text-dark" href="/property_list/">设备</a></h3>
+                                <p>资产设备管理。</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <div class="card shadow">
+                            <div class="card-body text-center">
+                                <p class="text-danger"><i class="fa fa-code-fork fa-5x"></i></p>
+                                <h3><a class="text-dark" href="#">流程</a></h3>
+                                <p>基本单据流程管理。</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <div class="card shadow">
+                            <div class="card-body text-center">
+                                <p class="text-info"><i class="fa fa-exchange fa-5x"></i></p>
+                                <h3><a class="text-dark" href="/pure_list/">文件传输</a></h3>
+                                <p>大量文件文件互传。</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mt-3">
+                        <div class="card shadow">
+                            <div class="card-body text-center">
+                                <p class="text-warning"><i class="fa fa-send fa-5x"></i></p>
+                                <h3><a class="text-dark" href="#">邮件寄送</a></h3>
+                                <p>电子邮件发送附件文件。</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <div class="card shadow">
+                            <div class="card-body text-center">
+                                <p class="text-primary" ><i class="fa fa-share-alt fa-5x"></i></p>
+                                <h3><a class="text-dark" href="#">分享</a></h3>
+                                <p>互联网文件分享。</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <div class="card shadow">
+                            <div class="card-body text-center">
+                                <p class="text-body"><i class="fa fa-area-chart fa-5x"></i></p>
+                                <h3><a class="text-dark" href="/asset_kanban_board/">图表</a></h3>
+                                <p>图形及简略报表</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <div class="card shadow">
+                            <div class="card-body text-center">
+                                <p class="text-success"><i class="fa fa-wheelchair-alt fa-5x"></i></p>
+                                <h3><a class="text-dark" href="#">帮助</a></h3>
+                                <p>使用的简略说明</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock mainbody %}
+   </div>
+   <!-- Bootstrap -->
+   <script src="/static/js/jquery-3.3.1.min.js"></script>
+   <script src="/static/js/popper.min.js " ></script>
+   <script src="/static/js/bootstrap.min.js"></script>
+   <!-- Graphs -->
+   <script src="/static/js/holder.min.js"></script>
+
+{#   <script src="/static/js/metisMenu.min.js"></script>#}
+
+    <script type="text/javascript">
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+        });
+    </script>
+
+    {% block jquery %}
+        <script src="/static/js/base/base.js"></script>
+    {% endblock jquery%}
+</body>
+</html>

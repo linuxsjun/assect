@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block styecss %}
+{% endblock styecss %}
+
+{% block mainbody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2 border-right">
+                {% include 'hr_sub_sidemenu.html' %}
+            </div>
+            <div class="col-10">
+                <div class="row border-bottom mb-2">
+                    <div class="col-12">
+                        <div class="row">
+                            <h3 class="col-sm-6">{{ title }}</h3>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4">
+                                <button type="button" class="btn btn-primary" id="create">创建</button>
+                            </div>
+                            <div class="col-sm-4">
+                                <!--导入导出条-->
+                                <div class="btn-group">
+                                    <div class="btn-group dropdown">
+                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                            动作
+                                            <span class="caret"></span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#" id="dddd">导入</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4"></div>
+                        </div>
+                    </div>
+                </div>
+                <article class="row">
+                    <div class="col-12">
+                        <div class="card-columns">
+                        {% for item in context %}
+                            <div class="card border-dark">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col ml-auto px-1 align-self-center">
+                                            <h6 class="mb-0 pb-0">{{ item.name }}</h6>
+{#                                            <p class="mb-0 text-muted">公司名称 \ {{ item.parentid }}</p>#}
+                                        </div>
+                                        <div class="col-auto align-self-center px-1">
+                                            <div class="dropdown">
+                                              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-ellipsis-v fa-1x text-muted"></i>
+                                              </button>
+                                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                  <button type="button" class="dropdown-item btn btn-primary">编辑</button>
+                                                  <button type="button" class="dropdown-item btn btn-primary">设置</button>
+                                                  <div class="dropdown-divider"></div>
+                                                  <button type="button" class="dropdown-item btn btn-primary text-danger" data-action="delete" data-pid="{{ item.pid }}">删除</button>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-2">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="text-muted">员工: <span class="ml-3">{{ item.employeenum }}</span></div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="text-muted">岗位: <span class="ml-3">1</span></div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="text-muted">子部门: <span class="ml-3">{{ item.departmentsum }}</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer py-2">
+                                    <div class="row">
+                                        <strong class="col-auto text-muted">负责人:</strong>
+                                        <div class="col mr-auto px-0">
+                                            {% for leader in item.leaders %}
+                                                <span class="badge badge-primary">{{ leader.employeeid__name }} <a href="{{ leader.id }}"><i class="fa fa-close text-danger"></i></a></span>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="col-auto"><a href="#"><i class="fa fa-plus fa-1x text-success"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="edtdep" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">创建</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <form id="modaldepedit">
+              {% csrf_token %}
+              <input type="text" class="form-control sr-only" name="pid" value="0">
+                  <div class="form-group row mb-2">
+                      <label for="name" class="col-sm-2 col-form-label text-right pr-3 border-right">名称</label>
+                      <div class="col-4">
+                          <input type="text" class="form-control required" name="name" value="">
+                          <!-- Todo 不能为空，不能重复 -->
+                      </div>
+                      <label for="name" class="col-sm-2 col-form-label text-right pr-3 border-right">负责人</label>
+                      <div class="col-4">
+                          <select class="form-control" name="leader">
+                              <option value="0" selected>(无)</option>
+                              {% for item in employees %}
+                                  <option value="{{ item.id }}">{{ item.name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                  </div>
+                  <div class="form-group row mb-2">
+                      <label for="parent" class="col-sm-2 col-form-label text-right pr-3 border-right">上一级</label>
+                      <div class="col-4">
+                          <select class="form-control" name="parent">
+                              <option value="0" selected>(无)</option>
+                              {% for item in parents %}
+                              <option value="{{ item.id }}">{{ item.name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                  </div>
+                  <div class="form-group row mb-2 sr-only">
+                      <label for="order" class="col-2 col-form-label">排序</label>
+                      <div class="col-4">
+                          <input type="text" class="form-control" name="order" value="">
+                      </div>
+                  </div>
+                  <div class="form-group row mb-2 sr-only">
+                      <label for="type" class="col-2 col-form-label">类型</label>
+                      <div class="col-4">
+                          <input type="text" class="form-control" name="type" value="0">
+                      </div>
+                  </div>
+                  <input type="text" class="form-control sr-only" name="act" value="create">
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" id="save">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- toast -->
+    {% include 'hr_sub_toast.html' %}
+{% endblock %}
+
+
+{% block jquery %}
+    <script src="/static/js/hr/hr_department_list.js"></script>
+{% endblock jquery%}

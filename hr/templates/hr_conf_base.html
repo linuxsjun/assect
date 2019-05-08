@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block styecss %}
+    <link rel="stylesheet" type="text/css" href="/static/css/hr/view_hr_list.css">
+{% endblock styecss %}
+
+{% block mainbody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2 border-right">
+                {% include 'hr_sub_sidemenu.html' %}
+            </div>
+            <div class="col-10">
+                <div class="row border-bottom mb-3">
+                    <div class="col-12">
+                        <div class="row">
+                            <h3 class="col-sm-6">{{ title }}</h3>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary" data-toggle="create" id="kkkk">保存</button>
+                                <button type="button" class="btn btn-outline-secondary disabled" data-toggle="del">返回</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <article class="row">
+                    <div class="col-12">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h5 class="text-info">常规</h5>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                                <div class="col-2 border-right mr-3">表单日志</div>
+                                <div class="custom-control custom-radio col-2">
+                                    <input type="radio" class="form-check-input" id="synctype1" name="synctype">
+                                    <label for="synctype1" class="form-check-label">显示日志</label>
+                                </div>
+                                <div class="custom-control custom-radio col-2">
+                                    <input type="radio" class="form-check-input" id="synctype2" name="synctype">
+                                    <label for="synctype2" class="form-check-label">不显示日志</label>
+                                </div>
+                            </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+    {% include 'hr_sub_toast.html' %}
+{% endblock %}
+
+{% block jquery %}
+        <script src="/static/js/hr/view_hr_broad.js"></script>
+{% endblock jquery%}

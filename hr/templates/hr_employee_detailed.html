@@ -1,0 +1,752 @@
+{% extends "base.html" %}
+
+{% block styecss %}
+    <link rel="stylesheet" type="text/css" href="/static/css/view_hr_list.css">
+{% endblock styecss %}
+
+{% block jquery %}
+        <script src="/static/js/property_form.js"></script>
+{% endblock jquery%}
+
+{% block mainbody %}
+    <!--<div class="view_form"> -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2 border-right">
+                {% include 'hr_sub_sidemenu.html' %}
+            </div>
+            <div class="col-10">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row">
+                            <h3 class="col-sm-6">{{ title }}</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!--工具条-->
+                                <button type="button" class="btn btn-primary sr-only" data-dis="display" data-toggle="edit">编辑</button>
+                                <button type="button" class="btn btn-outline-secondary sr-only" data-dis="display" data-toggle="del">删除</button>
+                                <button type="button" class="btn btn-primary sr-only" data-dis="edit" data-toggle="save">保存</button>
+                                <button type="button" class="btn btn-outline-secondary" data-toggle="goback">返回</button>
+                            </div>
+                            <div class="col-sm-4">
+                                <!--导入导出条-->
+                                <div class="btn-group">
+                                    <div class="btn-group dropdown">
+                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                            打印
+                                            <span class="caret"></span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#">信息单</a>
+                                            <a class="dropdown-item" href="#">基本信息</a>
+                                        </div>
+                                    </div>
+                                    <div class="btn-group dropdown">
+                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                            动作
+                                            <span class="caret"></span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="/property_form/?act=create&id={{ pk }}">复制</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">同步到企业微信</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <!--导航条-->
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-end">
+                                        <li class="page-item">
+                                            <a class="page-link" href="/property_form/?act=display&id={{ ppk }}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item disabled"><a class="page-link"><span id="assetid">{{ pk|default:0 }}</span>/{{ spk|default:0 }}</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="/property_form/?act=display&id={{ npk }}" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <form class="col-12" action="#" method="post" enctype="multipart/form-data" name="accset_form" id="headerimgform">
+                        {% csrf_token %}
+                        <input name="act" id="act" value="{{ act }}" type="hidden">
+
+                        <div class="row shadow border-top border-bottom py-2">
+                            <div class="col-auto ml-3 mr-auto">
+                                <button type="button" class="btn btn-outline-primary btn-sm">入职</button>
+                                <button type="button" class="btn btn-outline-info sr-only" disabled="True">借用</button>
+                                <button type="button" class="btn btn-outline-dark sr-only" disabled="True">退还</button>
+                                <button type="button" class="btn btn-outline-warning sr-only" disabled="True">维修</button>
+                                <button type="button" class="btn btn-outline-danger btn-sm">离职</button>
+                            </div>
+                            <div class="col-auto">
+                                <span>
+                                    {% if context.status  %}
+                                        {% if context.status == 1 %}
+                                        <h6 href="#" class="badge badge-secondary">闲置</h6>
+                                        {% endif %}
+                                        {% if context.status == 2 %}
+                                        <a href="#" class="badge badge-success"><h6 class="my-0">在用</h6></a>
+                                        {% endif %}
+                                        {% if context.status == 3 %}
+                                        <a href="#" class="badge badge-warning"><h6 class="my-0">维修</h6></a>
+                                        {% endif %}
+                                        {% if context.status == 4 %}
+                                        <a href="#" class="badge badge-danger"><h6 class="my-0">报废</h6></a>
+                                        {% endif %}
+                                    {% else %}
+                                        <a href="#" class="badge badge-secondary"><h6 class="my-0">员工</h6></a>
+                                    {% endif %}
+                                </span>
+                                <a class="py-0"><i class="fa fa-weixin {% if context.wxsync %}text-success{% else %}text-black-50{% endif %} mx-3" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="container shadow border p-3 rounded my-3">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-sm-7 mb-3">
+                                        <div class="media">
+                                            <a class="pr-3" href="#">
+                                                <img src={{ context.avatar }} data-id={{ imgid }}  class="img-thumbnail" id="headerimg" alt="headerimg" style="height: 64px; width: 64px;">
+                                            </a>
+                                            <input class="form-control sr-only" type="text" name="id" id="id" value="{{ context.id }}">
+                                            <input type="file" name="file" class="sr-only" id="imgupload" accept=".png,.gif,.jpg,.jpeg">
+                                            <div class="media-body">
+                                                <div class="row" data-dis="display">
+                                                    <div class="col-12">
+                                                        <h2 class="media-heading" id="siddis">{{ context.name }}</h2>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <p>
+                                                            <span class="badge badge-primary">负责人</span>
+                                                            <span class="badge badge-success">主管</span>
+                                                            <span class="badge badge-warning">试用</span>
+                                                            <span class="badge badge-primary">员工</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 mb-3">
+                                        <div class="btn-group" role="group">
+                                            <div class="btn-group" role="group">
+                                                {% if context.active == 1 %}
+                                                    <button type="button" class="btn btn-outline-secondary" data-toggle="active" data-val="1">
+                                                        <i class="fa fa-archive fa-1x"></i> 归档
+                                                    </button>
+                                                {% else %}
+                                                    <button type="button" class="btn btn-outline-secondary" data-toggle="active" data-val="0">
+                                                        <i class="fa fa-archive fa-1x"></i> 取档
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-outline-secondary">
+                                                    <i class="fa fa-wrench fa-1x"></i>
+                                                    出勤
+                                                    <span class="badge badge-secondary">15</span>
+                                                </button>
+                                            </div>
+                                            <div class="btn-group sr-only" role="group">
+                                                <button type="button" class="btn btn-outline-secondary">
+                                                    <i class="fa fa-truck fa-1x"></i>
+                                                    调配
+                                                    <span class="badge badge-secondary">9</span>
+                                                </button>
+                                            </div>
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                                                    <i class="fa fa-paperclip fa-1x"></i>
+                                                    附件
+                                                    <span class="badge badge-secondary">9</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 下面是Tabs-->
+                                <div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item"><a class="nav-link  active" href="#public" data-toggle="tab">公开</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#personal" data-toggle="tab">个人</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#record" data-toggle="tab">履历</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#human" data-toggle="tab">人力</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#other" data-toggle="tab">其它</a></li>
+                                    </ul>
+                                    <div class="tab-content border-bottom py-3">
+                                        <div class="tab-pane active" id="public">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <h5 class="text-info pl-3">联系方式</h5>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="address">地址</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" type="text" name="address" id="address" list="indexname" value="{{ context.address }}" placeholder="(必填)">
+                                                            <div class="invalid-tooltip" id="popname">
+                                                                必填
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="mobile">手机</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text" name="mobile" id="mobile" value="{{ context.mobile }}" placeholder="(必填,不可重复)">
+                                                            <div class="invalid-tooltip" id="popsn">
+                                                                必填
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="email">邮箱</label>
+                                                        <div class="col-sm-10 input-group">
+                                                            <input class="form-control" type="text" name="email" id="email" value="{{ context.email| default_if_none:"" }}"  placeholder="">
+                                                            <div class="input-group-append">
+                                                                 <span class="input-group-text">@jtacn.com</span>
+                                                                 <span class="input-group-text"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                                                             </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="telephone">座机</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" id="telephone" type="text" name="telephone" value="{{ context.telephone| default_if_none:"" }}" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h5 class="text-info pl-3">职务</h5>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="department">部门</label>
+                                                        <div class="col-sm-10 align-self-center">
+                                                            <h6 class="mb-0">
+                                                                {% for dep in context.emps %}
+                                                                <span class="badge badge-info mr-1"><span class="mr-2">{{ dep.departmentid__name }}</span><a href="{{ dep.id }}"><i class="fa fa-close text-danger"></i></a></span>
+                                                                {% endfor %}
+                                                                <span class="col-auto"><a href="#"><i class="fa fa-plus fa-1x text-success"></i></a></span>
+                                                            </h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="position">职位</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" type="text" name="position" value="{{ context.position|default:"" }}" id="position" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="categoryid">负责部门</label>
+                                                        <div class="col-sm-10 align-self-center">
+                                                            <h6 class="my-0">
+                                                                {% for dep_isleader in context.dep_isleaders %}
+                                                                <span class="badge badge-primary mr-1"><span class="mr-2">{{ dep_isleader.departmentid__name }}</span><a href="{{ dep_isleader.id }}"><i class="fa fa-close text-danger"></i></a></span>
+                                                                {% endfor %}
+                                                                <span class="col-auto"><a href="#"><i class="fa fa-plus fa-1x text-success"></i></a></span>
+                                                            </h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="personal">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">身份信息</h5>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-3 col-form-label text-right pr-3 border-right" for="identity">身份证/护照号</label>
+                                                        <div class="col-sm-9">
+                                                            <input class="form-control" type="text" name="identity" id="identity" value="{{ context.identity|date:'Y-m-d' }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="nationality">国籍</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text" name="nationality" id="nationality" value="{{ context.nationality|default:'' }}">
+                                                        </div>
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="nation">民族</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text" name="nation" id="nation" value="{{ context.nation|date:'Y-m-d' }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="native">籍贯</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text" name="native" id="native" value="{{ context.native|date:'Y-m-d' }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">亲属信息</h5>
+                                                    <div class="row mx-3 mb-2">
+                                                        <div class="col-12 pl-3">
+                                                            <table class="table table-hover table-sm border-bottom">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                        <th scope="col">姓名</th>
+                                                                        <th scope="col">关系</th>
+                                                                        <th scope="col">年龄</th>
+                                                                        <th scope="col">工作单位</th>
+                                                                        <th scope="col">职务</th>
+                                                                        <th scope="col">电话</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th><p class="mb-0">XXXXX</p></th>
+                                                                        <td>漱口英语</td>
+                                                                        <td>英语</td>
+                                                                        <td>三级英语证书</td>
+                                                                        <td>三级英语证书</td>
+                                                                        <td>三级英语证书</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">状态</h5>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="brithday">出生日期</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="date" name="brithday" id="brithday" value="{{ context.brithday|date:'Y-m-d' }}">
+                                                        </div>
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="age">年龄</label>
+                                                        <div class="col-sm-4 input-group">
+                                                            <input class="form-control" type="number" name="age" id="age" value="{{ context.age|date:'' }}" readonly>
+                                                            <div class="input-group-append">
+                                                                 <span class="input-group-text">岁</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="hight">身高</label>
+                                                        <div class="col-sm-4 input-group">
+                                                            <input class="form-control" type="number" name="hight" id="hight" value="{{ context.hight }}">
+                                                             <div class="input-group-append">
+                                                                 <span class="input-group-text">CM</span>
+                                                             </div>
+                                                        </div>
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="weight">体重</label>
+                                                        <div class="col-sm-4 input-group">
+                                                            <input class="form-control" type="number" name="weight" id="weight" value="{{ context.weight }}">
+                                                            <div class="input-group-append">
+                                                                 <span class="input-group-text">KG</span>
+                                                             </div>
+                                                        </div>
+                                                    </div>
+{#                                                    <div class="form-group form-row mx-3 mb-2">#}
+{##}
+{#                                                    </div>#}
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="bloodtype">血型</label>
+                                                        <div class="col-sm-10">
+                                                            <select class="form-control" name="bloodtype" id="bloodtype">
+                                                                <option value="1" selected="selected">A</option>
+                                                                <option value="2">B</option>
+                                                                <option value="2">AB</option>
+                                                                <option value="2">O</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="gender">性别</label>
+                                                        <div class="col-sm-10 p-2">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="gender" id="man" value="1">
+                                                                <label class="form-check-label" for="man">男</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="gender" id="woman" value="0">
+                                                                <label class="form-check-label" for="woman">女</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="marital">婚姻状况</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group">
+                                                                <select class="form-control" id="marital" name="marital">
+                                                                    <option value="1" selected="selected">未婚</option>
+                                                                    <option value="2">已婚</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="record">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">学历</h5>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right">最高学历</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text" name="warranty" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mx-3 mb-2">
+                                                        <div class="col-12 pl-3">
+                                                            <table class="table table-hover table-sm border-bottom">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                        <th scope="col">起至年月</th>
+                                                                        <th scope="col">学校名校</th>
+                                                                        <th scope="col">专业名称</th>
+                                                                        <th scope="col">毕业/肆业</th>
+                                                                        <th scope="col">学历/学位</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th><p class="mb-0">2013-2</p><p class="ml-3 mb-0">2013-5</p></th>
+                                                                        <td>XXXXXXXX</td>
+                                                                        <td>XXX</td>
+                                                                        <td>
+                                                                            <span class="form-check">
+                                                                                <input class="form-check-input" id="stdo" type="radio" name="study" {% if context.wxsync %} checked="checked" {% endif %} value="False"/>
+                                                                                <label class="form-check-label" for="stdo">毕业</label>
+                                                                            </span>
+                                                                            <span class="form-check form-check-inline">
+                                                                                <input class="form-check-input" id="stdf" type="radio" name="study" {% if context.wxsync %} checked="checked" {% endif %} value="False"/>
+                                                                                <label class="form-check-label" for="stdf">肆业</label>
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>XXXXX</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">培训</h5>
+                                                    <div class="row mx-3 mb-2">
+                                                        <div class="col-12 pl-3">
+                                                            <table class="table table-hover table-sm border-bottom">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                        <th scope="col">起至年月</th>
+                                                                        <th scope="col">培训机构</th>
+                                                                        <th scope="col">培训内容</th>
+                                                                        <th scope="col">获得证书</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th><p class="mb-0">2013-2</p><p class="ml-3 mb-0">2013-5</p></th>
+                                                                        <td>漱口英语</td>
+                                                                        <td>英语</td>
+                                                                        <td>三级英语证书</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th><p class="mb-0">2013-2</p><p class="ml-3 mb-0">2013-5</p></th>
+                                                                        <td>漱口英语</td>
+                                                                        <td>英语</td>
+                                                                        <td>三级英语证书</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th><p class="mb-0">2013-2</p><p class="ml-3 mb-0">2013-5</p></th>
+                                                                        <td>漱口英语</td>
+                                                                        <td>英语</td>
+                                                                        <td>三级英语证书</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th><p class="mb-0">2013-2</p><p class="ml-3 mb-0">2013-5</p></th>
+                                                                        <td>漱口英语</td>
+                                                                        <td>英语</td>
+                                                                        <td>三级英语证书</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">工作</h5>
+                                                    <div class="row mx-3 mb-2">
+                                                        <div class="col-12 pl-3">
+                                                            <table class="table table-hover table-sm border-bottom">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                        <th scope="col">起至年月</th>
+                                                                        <th scope="col">单位名称</th>
+                                                                        <th scope="col">职务</th>
+                                                                        <th scope="col">最高月薪</th>
+                                                                        <th scope="col">离职原因</th>
+                                                                        <th scope="col">证明人及联系方式</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th scope="row"><p class="mb-0">2013-2</p><p class="ml-3 mb-0">2013-5</p></th>
+                                                                        <td>XXXX</td>
+                                                                        <td>经理</td>
+                                                                        <td>5000</td>
+                                                                        <td>XXXXX</td>
+                                                                        <td><p class="mb-0">名字</p><p class="mb-0">12365242364</p></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">荣誉</h5>
+                                                    <div class="row mx-3 mb-2">
+                                                        <div class="col-12 pl-3">
+                                                            <table class="table table-hover table-sm border-bottom">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                        <th scope="col">起至年月</th>
+                                                                        <th scope="col">单位名称</th>
+                                                                        <th scope="col">职务</th>
+                                                                        <th scope="col">最高月薪</th>
+                                                                        <th scope="col">离职原因</th>
+                                                                        <th scope="col">证明人及联系方式</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th scope="row"><p class="mb-0">2013-2</p><p class="ml-3 mb-0">2013-5</p></th>
+                                                                        <td>XXXX</td>
+                                                                        <td>经理</td>
+                                                                        <td>5000</td>
+                                                                        <td>XXXXX</td>
+                                                                        <td><p class="mb-0">名字</p><p class="mb-0">12365242364</p></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="human">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">在职</h5>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="noid">员工编号</label>
+                                                        <div class="col-sm-4">
+                                                            <div class="input-group" >
+                                                                <input class="form-control" type="text" name="noid" id="noid" list="indexname" value="" placeholder="(自动编号)">
+                                                            </div>
+                                                        </div>
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="pin">PIN</label>
+                                                        <div class="col-sm-4">
+                                                            <div class="input-group" >
+                                                                <input class="form-control" type="text" name="pin" id="pin" list="indexname" value="{{ context.extemployeeatt__pin }}" placeholder="(考勤编号)">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="name">入职日期</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="date" name="address" id="address" value="">
+                                                        </div>
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="name">离职日期</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="date" name="address" id="address" value="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="user">出勤方式{{ context.user_name }}</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group">
+                                                                <select class="form-control" id="user" name="user">
+                                                                    <option value="0" selected="selected">123</option>
+                                                                </select>
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-external-link fa-1x"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right">企业微信</label>
+                                                        <div class="col-10 align-self-center">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" id="syncwx" type="checkbox" name="syncwx" {% if context.wxsync %} checked="checked" {% endif %} value="False"/>
+                                                                <label class="form-check-label" for="syncwx">同步到企业微信</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info">财务</h5>
+                                                    <div class="form-group form-row mb-2">
+                                                        <label class="col-sm-2 col-form-label text-left text-sm-right">银行账户</label>
+                                                        <div class="col-sm-10 input-group">
+                                                            <input class="form-control" type="text" name="manufacture" value="">
+                                                            <div class="input-group-append">
+                                                                 <button class="btn btn-outline-secondary" type="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="other">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">其它</h5>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="infofrom">信息来源</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group" >
+                                                                <select class="form-control" id="infofrom" name="infofrom">
+                                                                    <option value="0" selected="selected">网络</option>
+                                                                    <option value="1">现场招聘会</option>
+                                                                    <option value="2">校园招聘</option>
+                                                                    <option value="3">熟人推荐</option>
+                                                                    <option value="4">内部推荐</option>
+                                                                    <option value="5">其它</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2 sr-only">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="name">入职日期</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="date" name="address" id="address" value="">
+                                                        </div>
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="name">离职日期</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="date" name="address" id="address" value="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2 sr-only">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="user">出勤方式{{ context.user_name }}</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group">
+                                                                <select class="form-control" id="user" name="user">
+                                                                    <option value="0" selected="selected">123</option>
+                                                                </select>
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-external-link fa-1x"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2 sr-only">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right">企业微信</label>
+                                                        <div class="col-10 align-self-center">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" id="syncwx" type="checkbox" name="syncwx" {% if context.wxsync %} checked="checked" {% endif %} value="False"/>
+                                                                <label class="form-check-label" for="syncwx">同步到企业微信</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info">备注</h5>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <textarea class="form-control" name="comment" clos=",100" rows="5" warp="soft" placeholder="备注">{{ context.nots |default:"" }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 记录 -->
+                <div class="row justify-content-center border-top sr-only">
+                    <div class="col-8">
+                        <p class="text-center">分配记录</p>
+                        <div class="media mt-2">
+                            <img src="" alt="" data-src="holder.js/48x48" class="mr-3">
+                            <div class="media-body bg-light">
+                                <h5>记录一</h5>
+                                <p>这是一条记录</p>
+                            </div>
+                        </div>
+                        <div class="media mt-2">
+                            <img src="" alt="" data-src="holder.js/48x48" class="mr-3">
+                            <div class="media-body bg-light">
+                                <h5>记录二</h5>
+                                <p>这是一条记录</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <!-- 设备照片对话框 -->
+            <div class="modal fade" id="imglist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">照片: 查询</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+{#                                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>#}
+                                </ol>
+                                <div class="carousel-inner">
+{#                                    <div class="carousel-item active">#}
+{#                                        <img class="d-block w-100" data-src="holder.js/520x400" alt="First slide">#}
+{#                                    </div>#}
+                                </div>
+                                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 删除对话框 -->
+            <div class="modal fade" id="Md_del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">删除记录</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="content">
+                                <p>请确认是否删除编号:<b>{{ context.sid }}</b>的记录？</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-danger" data-toggle="surdel">删除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

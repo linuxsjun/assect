@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block styecss %}
+    <link rel="stylesheet" type="text/css" href="/static/css/hr/view_hr_list.css">
+{% endblock styecss %}
+
+{% block mainbody %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 border-right">
+            {% include 'hr_sub_sidemenu.html' %}
+        </div>
+        <div class="col-10">
+            <div class="row border-bottom mb-2">
+                <div class="col-12">
+                    <div class="row">
+                        <h3 class="col-sm-6">{{ title }}</h3>
+                        <div class="col-sm-6 sr-only">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="搜索...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span></button>
+                                </span>
+                            </div><!-- /input-group -->
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <!--工具条-->
+                            <button type="button" class="btn btn-primary" data-toggle="create">创建</button>
+                            <button type="button" class="btn btn-outline-secondary disabled" data-toggle="del">删除</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <!--导入导出条-->
+                            <div class="btn-group">
+                                <div class="btn-group dropdown">
+                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                        动作
+                                        <span class="caret"></span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#" id="dddd">导入</a>
+                                        <a class="dropdown-item" href="/static/download/property_list.xlsx">导出xlsx</a>
+                                    </div>
+                                </div>
+                                <div class="btn-group dropdown">
+                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                        筛选
+                                        <span class="caret"></span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#" id="unactive">已归档</a>
+                                    </div>
+                                </div>
+                                <div class="btn-group dropdown">
+                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                        分组
+                                        <span class="caret"></span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#" data-act="group" data-groupby="name">部门</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#" data-act="group" data-groupby="categoryid">级别</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <!--导航条-->
+                            <ul class="pagination justify-content-end mb-0">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item disabled"><a class="page-link"><span id="assetid">{{ fpk|default:0 }}-{{ tpk|default:0 }}/{{ spk|default:0 }}</span></a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for item in context %}
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-2">
+                        <div class="card">
+                            <div class="card-body p-2">
+{#                                <div class="row ml-1">#}
+{#                                    <span class="col-atuo bg-success mb-2 d-block" style="width: 36px; height: 6px;"></span>#}
+{#                                    <span class="col-atuo bg-warning mb-2 d-block" style="width: 36px; height: 6px;"></span>#}
+{#                                    <span class="col-atuo bg-danger mb-2 d-block" style="width: 36px; height: 6px;"></span>#}
+{#                                </div>#}
+                                <div class="media">
+                                    <a href="{% url 'employee_detailed' %}?id={{ item.id }}">
+                                        <img class="rounded mr-3" src="{{ item.avatar| default:'/static/img/user.png' }}" alt="Card image cap" style="width:64px;">
+                                    </a>
+                                    <div class="media-body">
+                                        <div class="row">
+                                            <div class="col-auto mr-auto">
+                                                <h5 class="mb-1">{{ item.name }}</h5>
+                                            </div>
+                                            <div class="col-auto">
+                                            {% if item.isleader %}
+                                                <i class="fa fa-user-secret text-primary pr-2" aria-hidden="true"></i>
+                                            {% endif %}
+                                             {% if item.wxsync %}
+                                                <i class="fa fa-weixin text-success pr-2" aria-hidden="true"></i>
+                                            {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <p class="my-0 text-secondary"><span><i class="fa fa-credit-card fa-1x"></i></span>: {{ item.position }}</p>
+                                                <p class="my-0 text-secondary"><span><i class="fa fa-mobile fa-1x"></i></span>: {{ item.mobile }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="list-group list-group-flush sr-only">
+                                <li class="list-group-item p-0">
+                                    <a class="btn text-muted" href="{{ item.id }}"><i class="fa fa-edit fa-1x"></i></a>
+                                    <a class="btn text-muted" href="{{ item.id }}"><i class="fa fa-th fa-1x"></i></a>
+                                    <a class="btn text-muted" href="{{ item.id }}"><i class="fa fa-chevron-right fa-1x"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block jquery %}
+    <script src="/static/js/hr/view_hr_broad.js"></script>
+{% endblock jquery%}

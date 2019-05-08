@@ -1,0 +1,14 @@
+@charset "utf-8";
+/* CSS Document */
+
+/**{margin:0;padding:0;	font-family:"Microsoft Yahei";*/
+	/*font-size: 12px;*/
+/*}*/
+
+body{
+	padding-top:64px;
+	font-size: 0.853rem;
+}
+
+.clearfix:after{content:"";height:0;line-height:0;display:block;visibility:hidden;clear:both;}
+.clearfix{zoom:1;}

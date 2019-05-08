@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block styecss %}
+    <link rel="stylesheet" type="text/css" href="/static/css/hr/view_hr_list.css">
+{% endblock styecss %}
+
+{% block mainbody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2 border-right">
+                {% include 'hr_sub_sidemenu.html' %}
+            </div>
+            <div class="col-10">
+                <div class="row border-bottom mb-3">
+                    <div class="col-12">
+                        <div class="row">
+                            <h3 class="col-sm-6">{{ title }}</h3>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary" data-toggle="create" id="kkkk">保存</button>
+                                <button type="button" class="btn btn-outline-secondary disabled" data-toggle="del">返回</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <article class="row">
+                    <div class="col-12">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h5 class="text-info">高级</h5>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h5 class="text-info">权限</h5>
+                                <div class="form-group row mb-2">
+                                    <label for="pe" class="col-2 col-form-label border-right">员工</label>
+                                    <div class="col-4">
+                                        <select type="" class="form-control form-control-sm" id="pe" placeholder="CRID"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-2">
+                                    <label for="pe" class="col-2 col-form-label border-right">经理</label>
+                                    <div class="col-4">
+                                        <select type="" class="form-control form-control-sm" id="pe" placeholder="CRID"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-2">
+                                    <label for="pe" class="col-2 col-form-label border-right">薪酬</label>
+                                    <div class="col-4">
+                                        <select type="" class="form-control form-control-sm" id="pe" placeholder="CRID"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-2">
+                                    <label for="pe" class="col-2 col-form-label border-right">管理</label>
+                                    <div class="col-4">
+                                        <select type="" class="form-control form-control-sm" id="pe" placeholder="CRID"></select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+
+                            <div class="col-12">
+                                <h5 class="text-info">企业微信</h5>
+                                <div class="form-group row mb-2">
+                                    <label for="inputEmail3" class="col-2 col-form-label border-right">微信同步码</label>
+                                    <div class="input-group col-5">
+                                        <input type="text" class="form-control " id="inputcrid" placeholder="CRID" aria-describedby="button-crid" value="uUJf-eFplyKlAWf2Cc9T8Guea4K1zpEiZXwXpCsHTQs">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-info" type="button" id="save-crid"><i class="fa fa-download" aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-2 border-right mr-3">同步方式</div>
+                                    <div class="custom-control custom-radio col-2">
+                                        <input type="radio" class="custom-control-input" id="synctype1" name="synctype">
+                                        <label for="synctype1" class="custom-control-label">自动同步</label>
+                                    </div>
+                                    <div class="custom-control custom-radio col-2">
+                                        <input type="radio" class="custom-control-input" id="synctype2" name="synctype">
+                                        <label for="synctype2" class="custom-control-label">手动同步</label>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-2 border-right">获取数据</div>
+                                    <div class="col">
+                                        <p>从企业微信中获取人员和部门信息，替换现有员工及部门数据</p>
+                                        <button class="btn btn-outline-info btn-sm" data-action="syncfromwx"><i class="fa fa-cloud-download fa-1x"></i>获取数据</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'hr_sub_toast.html' %}
+{% endblock %}
+
+{% block jquery %}
+        <script src="/static/js/hr/conf_more.js"></script>
+{% endblock jquery%}
