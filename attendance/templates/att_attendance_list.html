@@ -16,45 +16,18 @@
                     <div class="row">
                         <h3 class="col-auto mr-auto">{{ title }}</h3>
                         <div class="col-auto px-0">
-                            <div class="form-group form-row col-12">
-                                <label class="col-2 col-form-label text-right" for="name">日期</label>
-                                <div class="col-4">
-                                    <input class="form-control" type="date" name="address" id="address" value="">
-                                </div>
-                                <label class="col-auto col-form-label text-right" for="name">姓名</label>
-                                <div class="col-4">
-                                    <input class="form-control" type="text" name="address" id="address" value="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-auto px-0">
-                            <!--导入导出条-->
-                            <div class="btn-group">
-                                <div class="btn-group dropdown">
-                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
-                                        动作
-                                        <span class="caret"></span>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#" id="dddd">导入</a>
-                                        <a class="dropdown-item" href="/static/download/property_list.xlsx">导出xlsx</a>
-                                    </div>
-                                </div>
-                                <div class="btn-group dropdown">
-                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
-                                        分组
-                                        <span class="caret"></span>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#" data-act="group" data-groupby="name">部门</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" data-act="group" data-groupby="categoryid">级别</a>
-                                    </div>
-                                </div>
-                            </div>
+                            <from class="form-inline mb-2">
+                                <label class="col-form-label mr-2" for="name">日期</label>
+                                <input class="form-control mr-2" type="date" name="address" id="address" value="">
+                                <label class="col-form-label mr-2" for="name">部门</label>
+                                <input class="form-control mr-2" type="text" name="address" id="address" value="">
+                                <label class="col-form-label mr-2" for="name">姓名</label>
+                                <input class="form-control mr-2" type="text" name="address" id="address" value="">
+                                <button type="button" class="btn btn-primary mr-2" data-toggle="query">查询</button>
+                            </from>
                         </div>
                         <div class="col-auto">
-                            <button type="button" class="btn btn-primary" data-toggle="query">查询</button>
+
                             <div class="btn-group" role="group">
                                 <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="runstatus sr-only spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -159,11 +132,9 @@
 {% block jquery %}
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#btnGroupDrop1').attr("disabled",false);
-            $('#btnGroupDrop1').attr( "title", "jQuery 教程");
             $(".run").click(function () {
                 $('.runstatus').toggleClass('sr-only');
-
+                $('#btnGroupDrop1').attr("disabled", "1");
                 $.get(
                     "/att/getmssql/",
                     function (data) {

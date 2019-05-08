@@ -82,7 +82,9 @@ def attclass(request):
 
 
 def configatt(request):
-    return HttpResponse('configatt')
+    context={}
+    context['title'] = '设置'
+    return render(request, 'attendance_conf.html', context)
 
 
 def institem(items=None):
