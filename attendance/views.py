@@ -17,8 +17,8 @@ def index(request):
 
 
     # daystart = datetime.datetime.strptime('2019-5-7', '%Y-%m-%d')
-    # daytoday = datetime.datetime.strptime('2019-5-8', '%Y-%m-%d')
-    daytoday = datetime.datetime.today()
+    daytoday = datetime.datetime.strptime('2019-4-8', '%Y-%m-%d')
+    # daytoday = datetime.datetime.today()
 
     ps = checkinout.objects.filter(checktime__year=daytoday.year,
                                    checktime__month=daytoday.month,
