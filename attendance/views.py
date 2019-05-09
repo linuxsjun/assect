@@ -202,7 +202,7 @@ def getmssql(request):
     conn = pymssql.connect(server, user, password, database='db_att2000')
 
     cursor = conn.cursor()
-    cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-06'")
+    cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-08'")
     row = cursor.fetchone()
     crows = []
     while row:

@@ -110,37 +110,110 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <p class="card-text">开始时间</p>
-                                <p class="card-text">签到时间</p>
-                                <p class="card-text">必须签到</p>
-                                <p class="card-text">结束时间</p>
-
-                                <p class="card-text">大于为迟到</p>
-                                <p class="card-text">大于为缺勤</p>
-
-                                <p class="card-text">开始时间</p>
-                                <p class="card-text">签出时间</p>
-                                <p class="card-text">必须签出</p>
-                                <p class="card-text">结束时间</p>
-                                <p class="card-text">大于为早退</p>
-                                <p class="card-text">大于为缺勤</p>
-
-                                <p class="card-text">大于为记工</p>
-
-                            </div>
+                            <form>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    附：工时大于为全勤，无限定，迟到为真时判定，判定迟到是否有效
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <label class="col-form-label">开始时间</label>
+                                            <input class="form-control" type="time" name="instar" value="">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="col-form-label">结束时间</label>
+                                            <input class="form-control" type="time" name="incheck" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <label class="col-form-label">签到时间</label>
+                                            <input class="form-control" type="time" name="instar" value="">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="col-form-label">必须签到</label>
+                                            <input class="form-control" type="checkbox" name="incheck" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <label class="col-form-label">大于为迟到</label>
+                                            <input class="form-control" type="number" name="instar" value="">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="col-form-label">大于为缺勤</label>
+                                            <input class="form-control" type="number" name="incheck" value="">
+                                        </div>
+                                    </div>
                                 </li>
                                 <li class="list-group-item">
-                                    签到一次即为全勤
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <label class="card-text">开始时间</label>
+                                            <input class="form-control" type="time" name="instar" value="">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="card-text">结束时间</label>
+                                            <input class="form-control" type="time" name="incheck" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <label class="card-text">必须签出</label>
+                                            <input class="form-control" type="checkbox" name="instar" value="">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="card-text">签出时间</label>
+                                            <input class="form-control" type="time" name="incheck" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <label class="col-form-label col-auto">大于</label>
+                                        <div class="input-group col-4 mb-1">
+                                            <input class="form-control" type="number" name="incheck" value="">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">分钟</span>
+                                            </div>
+                                        </div>
+                                        <label class="col-form-label col">为早退</label>
+                                    </div>
+                                    <div class="form-row">
+                                        <label class="col-form-label col-auto">大于</label>
+                                        <div class="input-group col-4">
+                                            <input class="form-control" type="number" name="incheck" value="">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">分钟</span>
+                                            </div>
+                                        </div>
+                                        <label class="col-form-label col">为缺勤</label>
+                                    </div>
                                 </li>
                                 <li class="list-group-item">
-                                    <p class="card-text">记工作日(天)</p>
-                                    <p class="card-text">记工作时(分钟)</p>
+                                    <div class="form-group form-check mb-0">
+                                        <input type="checkbox" class="form-check-input">
+                                        <label class="form-check-label">迟到()分钟以内</label>
+                                        <label class="form-check-label">工时大于()分钟为不记迟到</label>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <div class="form-group form-check mb-0">
+                                        <input type="checkbox" class="form-check-input">
+                                        <label class="form-check-label">签到一次即为全勤</label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <label class="card-text">记工作日(天)</label>
+                                            <input class="form-control" type="number" name="instar" value="">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="card-text">记工作时(分钟)</label>
+                                            <input class="form-control" type="number" name="incheck" value="">
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
+                                </form>
                         </div>
                     </div>
                 </article>

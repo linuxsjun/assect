@@ -52,9 +52,10 @@
                     <table class="table table-hover">
                         <thead class="bg-light">
                             <tr>
-                                <th class="border-right" data-id="sid">姓名<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="0"></i></th>
+                                <th class="border-right" data-id="sid">姓名<i class="" aria-hidden="true" data-id="0"></i></th>
+                                <th class="border-right" data-id="sid">PIN<i class="" aria-hidden="true" data-id="0"></i></th>
                                 <th class="border-right" data-id="name">部门<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="1"></i></th>
-                                <th class="border-right" data-id="name">规则<i class="fa fa-sort-alpha-asc" aria-hidden="true" data-id="1"></i></th>
+                                <th class="border-right" data-id="name">规则<i class="" aria-hidden="true" data-id="1"></i></th>
                                 <th class="border-right" data-id="specifications">最早<i class="" aria-hidden="true" data-id="0"></i></th>
                                 <th class="border-right" data-id="specifications">最晚<i class="" aria-hidden="true" data-id="0"></i></th>
                                 <th class="border-right" data-id="name">次数<i class="" aria-hidden="true" data-id="1"></i></th>
@@ -68,7 +69,8 @@
                         <tbody>
                             {% for item in context2 %}
                                 <tr>
-                                    <th>{{ item.name | title }} ({{ item.pin| safe }})</th>
+                                    <th>{{ item.name }}</th>
+                                    <td>{{ item.pin}}</td>
                                     <td>{{ item.employee_department__departmentid__name }}</td>
                                     <td>白天班</td>
                                     <td>{{ item.fast | date:"H:i" }}</td>
@@ -81,7 +83,7 @@
                                 </tr>
                             {% empty %}
                                 <tr>
-                                    <td colspan="10" style="text-align: center;">(暂无数据)</td>
+                                    <td colspan="11" style="text-align: center;">(暂无数据)</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
