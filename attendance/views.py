@@ -17,12 +17,13 @@ def index(request):
 
 
     # daystart = datetime.datetime.strptime('2019-5-7', '%Y-%m-%d')
-    # daytoday = datetime.datetime.strptime('2019-5-7', '%Y-%m-%d')
+    # daytoday = datetime.datetime.strptime('2019-5-8', '%Y-%m-%d')
     daytoday = datetime.datetime.today()
 
     ps = checkinout.objects.filter(checktime__year=daytoday.year,
                                    checktime__month=daytoday.month,
-                                   checktime__day=daytoday.day).values().order_by('-checktime')
+                                   checktime__day=daytoday.day,
+                                   pin=185).values().order_by('-checktime')
     emppins = employee.objects.exclude(extemployeeatt__pin=None).order_by('employee_department__departmentid__name', 'name').values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
     pinsdict = {}
     for i in emppins:
@@ -47,12 +48,6 @@ def index(request):
                                        pin=body)\
             .values('pin')\
             .annotate(last=Max('checktime'), fast=Min('checktime'), count=Count('userid'))
-        # e = checkinout.objects.filter(checktime__year=daystart.year,
-        #                                checktime__month=daystart.month,
-        #                                checktime__day=daystart.day,
-        #                                pin=body) \
-        #     .values().order_by('checktime')
-        # print(e)
         if ps:
             j = dict(emppin, **ps[0])
             j['long'] = j['last'] - j['fast']

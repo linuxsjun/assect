@@ -25,28 +25,61 @@
                     </div>
                 </div>
                 <article class="row">
-
-                    <div class="col-4">
-                        <div class="card">
+                    <div class="col-8">
+                        <div class="card mb-3">
                             <div class="card-header">
-                                Featured
+                                <div class="row justify-content-between">
+                                    <div class="col-auto"><span class="card-title">Featured</span></div>
+                                    <div class="col-auto">
+                                        <from class="form-inline">
+                                            <label class="col-form-label col-form-label-sm mr-2" for="name">部门</label>
+                                            <input class="form-control form-control-sm mr-2" type="text" name="address" id="address" value="">
+                                            <label class="col-form-label col-form-label-sm mr-2" for="name">姓名</label>
+                                            <input class="form-control form-control-sm" type="text" name="address" id="address" value="">
+                                        </from>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <div class="card-body px-0">
+                                <table class="table table-hover table-sm">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-right" data-id="sid">姓名<i class="" aria-hidden="true" data-id="0"></i></th>
+                                <th class="border-right" data-id="name">部门<i class="" aria-hidden="true" data-id="1"></i></th>
+                                <th class="border-right" data-id="name">PIN<i class="" aria-hidden="true" data-id="1"></i></th>
+                                <th class="border-right" data-id="specifications">时间<i class="fa fa-sort-alpha-desc" aria-hidden="true" data-id="0"></i></th>
+                                <th class="border-right" data-id="sn">方式<i class="" aria-hidden="true" data-id="0"></i></th>
+                                <th class="border-right" data-id="sn">来源<i class="" aria-hidden="true" data-id="0"></i></th>
+                                <th class="" data-id="sn">校准<i class="" aria-hidden="true" data-id="0"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in context %}
+                                <tr>
+                                    <th>{{ item.name | title }}</th>
+                                    <td>{{ item.employee_department__departmentid__name }}</td>
+                                    <td>{{ item.pin| default_if_none:'-' }}</td>
+                                    <td>{{ item.checktime | date:"Y-m-d H:i:s" }}</td>
+                                    <td>{{ item.count| default:"-"}}</td>
+                                    <td>{{ item.sn | default_if_none:'-' }}</td>
+                                    <td>设备</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="10" style="text-align: center;">(暂无数据)</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card">
+
+                        <div class="card mb-3">
                             <div class="card-header">
                                 Featured
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <p class="card-text">fsfasdfad</p>
                             </div>
                         </div>
                     </div>
@@ -58,7 +91,7 @@
                                         <span class="card-title">班次</span>
                                     </span>
                                     <span class="col-auto">
-                                        <i class="fa fa-plus fa-1x"></i>
+                                        <i class="fa fa-reply fa-1x"></i>
                                     </span>
                                 </div>
                             </div>
@@ -73,7 +106,7 @@
                                         <span class="card-title">时段</span>
                                     </span>
                                     <span class="col-auto">
-                                        <i class="fa fa-plus fa-1x"></i>
+                                        <i class="fa fa-upload fa-1x"></i>
                                     </span>
                                 </div>
                             </div>
@@ -109,7 +142,6 @@
                                 </li>
                             </ul>
                         </div>
-
                     </div>
                 </article>
             </div>
