@@ -5,6 +5,7 @@ from django.db import models
 
 
 class extemployeeatt(models.Model):
+    # 员工PIN
     employeeid = models.ForeignKey('hr.employee', on_delete=models.CASCADE, verbose_name='员工ID')
     pin = models.CharField(max_length=20, blank=True, null=True, verbose_name='pin')
 
@@ -13,11 +14,24 @@ class extemployeeatt(models.Model):
 
 
 class classes(models.Model):
+    # 班次
     name = models.CharField(max_length=24, blank=True, null=True, verbose_name='班次')
     type = models.IntegerField(default=0, verbose_name='type')
 
     class Meta:
         db_table = 'att_classes'
+
+
+class timesolt(models.Model):
+    # 时段
+    name = models.CharField(max_length=16, verbose_name='时段')
+    instar = models.TimeField(verbose_name='签到开始')
+    intime = models.TimeField(verbose_name='签到时间')
+    inend = models.TimeField(verbose_name='签到结束')
+    incheck = models.FloatField(default=0, verbose_name='必须签到')
+
+    class Meta:
+        db_table = 'att_timesolt'
 
 
 # class checkinout(models.Model):
