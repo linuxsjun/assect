@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from django.db.models import Max, Min, Count
 
 from attendance.models import checkinout, extemployeeatt
@@ -10,15 +10,17 @@ import threading
 from xml.etree.ElementTree import parse
 
 # Create your views here.
-
 def index(request):
+    return redirect('/att/attendance/')
+
+
+def attendance(request):
     context={}
     context['title'] = '签到'
 
-
     # daystart = datetime.datetime.strptime('2019-5-7', '%Y-%m-%d')
-    # daytoday = datetime.datetime.strptime('2019-4-8', '%Y-%m-%d')
-    daytoday = datetime.datetime.today()
+    daytoday = datetime.datetime.strptime('2019-4-8', '%Y-%m-%d')
+    # daytoday = datetime.datetime.today()
 
     ps = checkinout.objects.filter(checktime__year=daytoday.year,
                                    checktime__month=daytoday.month,
@@ -43,7 +45,6 @@ def index(request):
     emppins = employee.objects.exclude(extemployeeatt__pin=None).order_by('employee_department__departmentid__name', 'name').values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
     for emppin in emppins:
         pindicts[emppin['extemployeeatt__pin']] = emppin
-    # print(pindicts)
 
     ps = checkinout.objects.filter(checktime__year=daytoday.year,
                                    checktime__month=daytoday.month,
@@ -56,15 +57,11 @@ def index(request):
         if p['pin'] in pindicts:
             i.update(pindicts[p['pin']])
             i.update(p)
-            print('+++++', p['pin'], i)
         else:
             i.update(p)
-            print('-----', p['pin'])
         i['long'] = i['last'] - i['fast']
         d.append(i)
     context['context2'] = d
-
-
     return render(request, 'att_attendance_list.html', context)
 
 
