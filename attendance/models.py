@@ -22,13 +22,38 @@ class classes(models.Model):
         db_table = 'att_classes'
 
 
+class classsolt(models.Model):
+    # 班次的时段
+    classid = models.ForeignKey('classes', on_delete=models.CASCADE)
+    timesoltid = models.ForeignKey('timesolt', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'att_classsolt'
+
+
 class timesolt(models.Model):
     # 时段
-    name = models.CharField(max_length=16, verbose_name='时段')
+    name = models.CharField(max_length=16, verbose_name='时段名')
     instar = models.TimeField(verbose_name='签到开始')
     intime = models.TimeField(verbose_name='签到时间')
     inend = models.TimeField(verbose_name='签到结束')
-    incheck = models.FloatField(default=0, verbose_name='必须签到')
+    incheck = models.BooleanField(default=True, verbose_name='必须签到')
+    inlate = models.IntegerField(default=0, verbose_name='迟到')
+    inabs = models.IntegerField(default=0, verbose_name='缺勤')
+    outstar = models.TimeField(verbose_name='签到开始')
+    outtime = models.TimeField(verbose_name='签到时间')
+    outend = models.TimeField(verbose_name='签到结束')
+    outcheck = models.BooleanField(default=True, verbose_name='必须签到')
+    outleave = models.IntegerField(default=0, verbose_name='早退')
+    outabs = models.IntegerField(default=0, verbose_name='缺勤')
+    ckeckoneall = models.BooleanField(verbose_name='签到一次即为全勤')
+    recday = models.IntegerField(default=1, verbose_name='记工作日')
+    recminute = models.IntegerField(default=30, verbose_name='记工作时')
+    lateif = models.BooleanField(default=False, verbose_name='迟到工时有效')
+    latetime = models.IntegerField(default=30, verbose_name='迟到以内')
+    sumworkhours = models.IntegerField(default=0, verbose_name='小计工时')
+    adddate = models.DateTimeField(auto_now_add=True, verbose_name='新建时间')
+    moddate = models.DateTimeField(auto_now=True, verbose_name='更新时间')
 
     class Meta:
         db_table = 'att_timesolt'
