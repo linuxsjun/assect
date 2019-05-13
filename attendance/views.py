@@ -38,21 +38,31 @@ def index(request):
     context['context'] = p
 
 
-    p = []
+    d = []
+    pindicts= {}
     emppins = employee.objects.exclude(extemployeeatt__pin=None).order_by('employee_department__departmentid__name', 'name').values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
     for emppin in emppins:
-        body = emppin['extemployeeatt__pin']
-        ps = checkinout.objects.filter(checktime__year=daytoday.year,
-                                       checktime__month=daytoday.month,
-                                       checktime__day=daytoday.day,
-                                       pin=body)\
-            .values('pin')\
-            .annotate(last=Max('checktime'), fast=Min('checktime'), count=Count('userid'))
-        if ps:
-            j = dict(emppin, **ps[0])
-            j['long'] = j['last'] - j['fast']
-            p.append(j)
-        context['context2'] = p
+        pindicts[emppin['extemployeeatt__pin']] = emppin
+    # print(pindicts)
+
+    ps = checkinout.objects.filter(checktime__year=daytoday.year,
+                                   checktime__month=daytoday.month,
+                                   checktime__day=daytoday.day) \
+        .values('pin') \
+        .annotate(last=Max('checktime'), fast=Min('checktime'), count=Count('userid'))
+
+    for p in ps:
+        i = {}
+        if p['pin'] in pindicts:
+            i.update(pindicts[p['pin']])
+            i.update(p)
+            print('+++++', p['pin'], i)
+        else:
+            i.update(p)
+            print('-----', p['pin'])
+        i['long'] = i['last'] - i['fast']
+        d.append(i)
+    context['context2'] = d
 
 
     return render(request, 'att_attendance_list.html', context)
