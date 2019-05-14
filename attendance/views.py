@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from django.db.models import Max, Min, Count
 
 from attendance.models import checkinout, extemployeeatt
@@ -10,11 +10,13 @@ import threading
 from xml.etree.ElementTree import parse
 
 # Create your views here.
-
 def index(request):
+    return redirect('/att/attendance/')
+
+
+def attendance(request):
     context={}
     context['title'] = '签到'
-
 
     # daystart = datetime.datetime.strptime('2019-5-7', '%Y-%m-%d')
     # daytoday = datetime.datetime.strptime('2019-4-8', '%Y-%m-%d')
@@ -23,7 +25,7 @@ def index(request):
     ps = checkinout.objects.filter(checktime__year=daytoday.year,
                                    checktime__month=daytoday.month,
                                    checktime__day=daytoday.day,
-                                   pin=185).values().order_by('-checktime')
+                                   pin=32).values().order_by('-checktime')
     emppins = employee.objects.exclude(extemployeeatt__pin=None).order_by('employee_department__departmentid__name', 'name').values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
     pinsdict = {}
     for i in emppins:
@@ -40,10 +42,11 @@ def index(request):
 
     d = []
     pindicts= {}
-    emppins = employee.objects.exclude(extemployeeatt__pin=None).order_by('employee_department__departmentid__name', 'name').values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
+    emppins = employee.objects.exclude(extemployeeatt__pin=None)\
+        .order_by('employee_department__departmentid__name', 'name')\
+        .values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
     for emppin in emppins:
         pindicts[emppin['extemployeeatt__pin']] = emppin
-    # print(pindicts)
 
     ps = checkinout.objects.filter(checktime__year=daytoday.year,
                                    checktime__month=daytoday.month,
@@ -55,16 +58,10 @@ def index(request):
         i = {}
         if p['pin'] in pindicts:
             i.update(pindicts[p['pin']])
-            i.update(p)
-            print('+++++', p['pin'], i)
-        else:
-            i.update(p)
-            print('-----', p['pin'])
+        i.update(p)
         i['long'] = i['last'] - i['fast']
         d.append(i)
     context['context2'] = d
-
-
     return render(request, 'att_attendance_list.html', context)
 
 
@@ -213,6 +210,7 @@ def getmssql(request):
 
     cursor = conn.cursor()
     cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-08'")
+    # cursor.execute("select * from CHECKINOUT")
     row = cursor.fetchone()
     crows = []
     while row:
