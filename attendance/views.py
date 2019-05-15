@@ -20,13 +20,13 @@ def attendance(request):
 
     # daystart = datetime.datetime.strptime('2019-5-7', '%Y-%m-%d')
     daytoday = datetime.datetime.strptime('2019-4-8', '%Y-%m-%d')
-    # 1
+    #2
     # daytoday = datetime.datetime.today()
 
     ps = checkinout.objects.filter(checktime__year=daytoday.year,
                                    checktime__month=daytoday.month,
                                    checktime__day=daytoday.day,
-                                   pin=185).values().order_by('-checktime')
+                                   pin=32).values().order_by('-checktime')
     emppins = employee.objects.exclude(extemployeeatt__pin=None).order_by('employee_department__departmentid__name', 'name').values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
     pinsdict = {}
     for i in emppins:
@@ -43,7 +43,9 @@ def attendance(request):
 
     d = []
     pindicts= {}
-    emppins = employee.objects.exclude(extemployeeatt__pin=None).order_by('employee_department__departmentid__name', 'name').values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
+    emppins = employee.objects.exclude(extemployeeatt__pin=None)\
+        .order_by('employee_department__departmentid__name', 'name')\
+        .values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
     for emppin in emppins:
         pindicts[emppin['extemployeeatt__pin']] = emppin
 
@@ -57,9 +59,7 @@ def attendance(request):
         i = {}
         if p['pin'] in pindicts:
             i.update(pindicts[p['pin']])
-            i.update(p)
-        else:
-            i.update(p)
+        i.update(p)
         i['long'] = i['last'] - i['fast']
         d.append(i)
     context['context2'] = d
@@ -211,6 +211,7 @@ def getmssql(request):
 
     cursor = conn.cursor()
     cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-08'")
+    # cursor.execute("select * from CHECKINOUT")
     row = cursor.fetchone()
     crows = []
     while row:
