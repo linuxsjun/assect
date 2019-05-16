@@ -13,6 +13,19 @@ class extemployeeatt(models.Model):
         db_table = 'att_extemployeeatt'
 
 
+class classlist(models.Model):
+    # 员工排班表 Schedule
+    employeeid = models.ForeignKey('hr.employee', on_delete=models.CASCADE, verbose_name="员工ID")
+    classid = models.ForeignKey('classes', on_delete=models.CASCADE, verbose_name='班次ID')
+    datestart = models.DateField(blank=True, null=True, verbose_name='开始日期')
+    dateend = models.DateField(blank=True, null=True, verbose_name='结束日期')
+    adddate = models.DateTimeField(auto_now_add=True, verbose_name='新建时间')
+    moddate = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
+    class Meta:
+        db_table = 'att_classlist'
+
+
 class classes(models.Model):
     # 班次
     name = models.CharField(max_length=24, blank=True, null=True, verbose_name='班次')

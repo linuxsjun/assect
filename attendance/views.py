@@ -19,11 +19,12 @@ def attendance(request):
     context['title'] = '签到'
 
     if request.method == "GET":
-        if "user" in request.GET:
+        print('get')
+        if "namecheck" in request.GET:
             pass
         if 'datecheck' in request.GET:
             datecheck = request.GET['datecheck']
-            daytoday = datetime.datetime.strptime(datecheck, '"%Y-%m-%d"')
+            daytoday = datetime.datetime.strptime(datecheck, '%Y-%m-%d')
         else:
             daytoday = datetime.datetime.today()
         if 'departmentcheck' in request.GET:

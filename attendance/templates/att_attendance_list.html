@@ -16,15 +16,15 @@
                     <div class="row">
                         <h3 class="col-auto mr-auto">{{ title }}</h3>
                         <div class="col-auto px-0">
-                            <from class="form-inline mb-2">
-                                <label class="col-form-label mr-2" for="name">日期</label>
-                                <input class="form-control mr-2" type="date" name="address" id="address" value="{{ daytoday| date:"Y-m-d" }}">
-                                <label class="col-form-label mr-2" for="name">部门</label>
-                                <input class="form-control mr-2" type="text" name="address" id="address" value="">
-                                <label class="col-form-label mr-2" for="name">姓名</label>
-                                <input class="form-control mr-2" type="text" name="address" id="address" value="">
-                                <button type="button" class="btn btn-primary mr-2" data-toggle="query">查询</button>
-                            </from>
+                            <form class="form-inline mb-2" action=" {% url 'attendance:attendance' %}" method="get" >
+                                <label class="col-form-label mr-2" for="datecheck">日期</label>
+                                <input class="form-control mr-2" type="date" name="datecheck" id="datecheck" value="{{ daytoday| date:"Y-m-d" }}">
+                                <label class="col-form-label mr-2" for="departmentcheck">部门</label>
+                                <input class="form-control mr-2" type="text" name="departmentcheck" id="departmentcheck" value="">
+                                <label class="col-form-label mr-2" for="namecheck">姓名</label>
+                                <input class="form-control mr-2" type="text" name="namecheck" id="namecheck" value="">
+                                <button type="submit" class="btn btn-primary mr-2" data-toggle="query">查询</button>
+                            </form>
                         </div>
                         <div class="col-auto">
                             <div class="btn-group" role="group">
