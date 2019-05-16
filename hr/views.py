@@ -256,7 +256,7 @@ def dep_list(request):
 
 def confbase_view(request):
     context={}
-    context['title']='常规设置'
+    context['title'] = '常规设置'
 
     username = request.COOKIES.get('usercookie', None)
     if username:
@@ -270,12 +270,12 @@ def confbase_view(request):
         context['userinfo'] = '用户'
         return render(request, 'sign.html', context)
 
-    context['context']= ''
+    context['context'] = ''
     return render(request, 'hr_conf_base.html', context)
 
 
 def confmore_view(request):
-    context={}
+    context = {}
     context['title'] = '高级设置'
 
     username = request.COOKIES.get('usercookie', None)

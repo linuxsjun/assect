@@ -15,13 +15,23 @@ def index(request):
 
 
 def attendance(request):
-    context={}
+    context = {}
     context['title'] = '签到'
 
-    # daystart = datetime.datetime.strptime('2019-5-7', '%Y-%m-%d')
-    daytoday = datetime.datetime.strptime('2019-4-8', '%Y-%m-%d')
-    #2
-    # daytoday = datetime.datetime.today()
+    if request.method == "GET":
+        if "user" in request.GET:
+            pass
+        if 'datecheck' in request.GET:
+            datecheck = request.GET['datecheck']
+            daytoday = datetime.datetime.strptime(datecheck, '"%Y-%m-%d"')
+        else:
+            daytoday = datetime.datetime.today()
+        if 'departmentcheck' in request.GET:
+            pass
+        if 'getdays' in request.GET:
+            pass
+
+    context['daytoday'] = daytoday
 
     ps = checkinout.objects.filter(checktime__year=daytoday.year,
                                    checktime__month=daytoday.month,
