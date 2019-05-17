@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.db.models import Max, Min, Count
 
-from attendance.models import checkinout, extemployeeatt
+from attendance.models import extemployeeatt, classlist, classes, classsolt, timesolt, checkinout
 from hr.models import employee
 
 import datetime
@@ -221,7 +221,7 @@ def getmssql(request):
     conn = pymssql.connect(server, user, password, database='db_att2000')
 
     cursor = conn.cursor()
-    cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-08'")
+    cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-15'")
     # cursor.execute("select * from CHECKINOUT")
     row = cursor.fetchone()
     crows = []
@@ -293,3 +293,55 @@ def getmssqlpin(request):
     r = u = 0
 
     return HttpResponse("已有记录: " + str(u) +" 更新记录:" + str(r))
+
+
+def cmpcheck(request):
+    employeeid =7
+    checkday = datetime.datetime.strptime('2019-5-1', '%Y-%m-%d')
+
+    datestart = datetime.datetime.strptime('2019-5-1', '%Y-%m-%d')
+    dateend = datetime.datetime.strptime('2019-5-30', '%Y-%m-%d')
+
+    chcemployee = employee.objects.get(pk=employeeid)
+    k = classlist.objects.filter(employeeid=chcemployee)\
+        .values('id',
+                'employeeid',
+                'employeeid__name',
+                'datestart',
+                'dateend',
+                'classid__classsolt__timesoltid_id',
+                'classid__classsolt__timesoltid_id__name',
+                'classid__classsolt__timesoltid_id__intime')\
+        .order_by('datestart')
+
+    emppbs = []
+    for i in k:
+        e = i['datestart'].strftime("%Y-%m-%d")
+        sr = datetime.datetime.strptime(e, "%Y-%m-%d")
+
+        e = i['dateend'].strftime("%Y-%m-%d")
+        sp = datetime.datetime.strptime(e, "%Y-%m-%d")
+
+        thisdate = datestart
+        pb = {}
+        while thisdate <= dateend:
+            pb['employeeid'] = i['employeeid']
+            pb['daycheck'] = thisdate
+            if (thisdate>=sr)and(thisdate<=sp):
+                pb['timesolt'] = i['classid__classsolt__timesoltid_id']
+            else:
+                pb['timesolt'] = 0
+            emppbs.append(pb)
+            # print(pb)
+            thisdate += datetime.timedelta(days=1)
+    print(emppbs)
+    # Todo 计算步骤
+    # 计算排班
+        # 根据排班规则自动排班
+            # 根据节假日数据，校正节假日排班
+        # 根据单据校正打卡规则及时段时间
+    # 根据排班表提取当时数据
+    # 找到对应数据，计算规所需的对应源数据
+    # 使用源数据，核对规则
+    # 计算出结果并保存进表格
+    return HttpResponse(k.query)

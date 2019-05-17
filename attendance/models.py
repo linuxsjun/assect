@@ -3,7 +3,6 @@ from django.db import models
 # from hr.models import employee, employee_department
 # Create your models here.
 
-
 class extemployeeatt(models.Model):
     # 员工PIN
     employeeid = models.ForeignKey('hr.employee', on_delete=models.CASCADE, verbose_name='员工ID')

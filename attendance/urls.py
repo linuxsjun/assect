@@ -17,4 +17,5 @@ urlpatterns = [
     path('checkbody/', views.checkeveryday),
     path('getmssql/', views.getmssql),
     path('getmssqlpin/', views.getmssqlpin),
+    path('cmpcheck/', views.cmpcheck),
 ]
