@@ -221,7 +221,7 @@ def getmssql(request):
     conn = pymssql.connect(server, user, password, database='db_att2000')
 
     cursor = conn.cursor()
-    cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-15'")
+    cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-1'")
     # cursor.execute("select * from CHECKINOUT")
     row = cursor.fetchone()
     crows = []
@@ -301,73 +301,79 @@ def cmpcheck(request):
 
     datestart = datetime.datetime.strptime('2019-5-1', '%Y-%m-%d')
     dateend = datetime.datetime.strptime('2019-5-30', '%Y-%m-%d')
-    for i in range(1, 201):
-        print(i)
-        # Todo 计算步骤
-        # 计算排班
-        chcemployee = employee.objects.get(pk=employeeid)
-        k = classlist.objects.filter(employeeid=chcemployee)\
-            .values('id',
-                    'employeeid',
-                    'employeeid__name',
-                    'datestart',
-                    'dateend',
-                    'classid__classsolt__timesoltid_id',
-                    'classid__classsolt__timesoltid_id__name',
-                    'classid__classsolt__timesoltid_id__intime')\
-            .order_by('datestart')
 
-        timequery = timesolt.objects.all().values()
-        timedicts = {}
-        for i in timequery:
-            timedicts[i['id']] = i
+    # Todo 计算步骤
+    # 计算排班
+    chcemployee = employee.objects.get(pk=employeeid)
+    k = classlist.objects.filter(employeeid=chcemployee)\
+        .values('id',
+                'employeeid',
+                'employeeid__name',
+                'employeeid__extemployeeatt__pin',
+                'datestart',
+                'dateend',
+                'classid__classsolt__timesoltid_id',
+                'classid__classsolt__timesoltid_id__name',
+                'classid__classsolt__timesoltid_id__intime')\
+        .order_by('datestart')
 
-        # 根据排班规则自动排班
-        emppbs = []
-        for i in k:
-            e = i['datestart'].strftime("%Y-%m-%d")
-            sr = datetime.datetime.strptime(e, "%Y-%m-%d")
+    timequery = timesolt.objects.all().values()
+    timedicts = {}
+    for i in timequery:
+        timedicts[i['id']] = i
 
-            e = i['dateend'].strftime("%Y-%m-%d")
-            sp = datetime.datetime.strptime(e, "%Y-%m-%d")
+    # 根据排班规则自动排班
+    emppbs = []
+    for i in k:
+        e = i['datestart'].strftime("%Y-%m-%d")
+        sr = datetime.datetime.strptime(e, "%Y-%m-%d")
+
+        e = i['dateend'].strftime("%Y-%m-%d")
+        sp = datetime.datetime.strptime(e, "%Y-%m-%d")
 
 
-            thisdate = datestart
+        thisdate = datestart
 
-            while thisdate <= dateend:
-                pb = {}
-                pb['employeeid'] = i['employeeid']
-                pb['daycheck'] = thisdate
-                pb['weekday'] = thisdate.weekday()
-                if (thisdate >= sr)and(thisdate <= sp):
-                    # 根据周末数据，校正周末排班
-                    if (thisdate.weekday() == 5) or (thisdate.weekday() == 6):
-                        pb['id'] = 0
-                    else:
-                        pb.update(timedicts[i['classid__classsolt__timesoltid_id']])
-                    # Todo 根据节假日数据，校正节假日排班
-                else:
+        while thisdate <= dateend:
+            pb = {}
+            pb['employeeid'] = i['employeeid']
+            pb['daycheck'] = thisdate
+            pb['pin'] = i['employeeid__extemployeeatt__pin']
+            pb['weekday'] = thisdate.weekday()
+            if (thisdate >= sr)and(thisdate <= sp):
+                # 根据周末数据，校正周末排班
+                if (thisdate.weekday() == 5) or (thisdate.weekday() == 6):
                     pb['id'] = 0
-                emppbs.append(pb)
-                # print(pb)
-                thisdate += datetime.timedelta(days=1)
-        # print(emppbs)
+                else:
+                    pb.update(timedicts[i['classid__classsolt__timesoltid_id']])
+                # Todo 根据节假日数据，校正节假日排班
+                pass
+            else:
+                pb['id'] = 0
+            emppbs.append(pb)
+            print(pb)
+            thisdate += datetime.timedelta(days=1)
 
-        # Todo 根据单据校正打卡规则及时段时间
+    # Todo 根据单据校正打卡规则及时段时间
+    pass
 
-        # Todo 根据排班表提取当时数据
-        for pb in emppbs:
-            if pb['id'] != 0:
-                # print(pb['id'])
-                daytoday = datetime.datetime.strptime("2019-05-08", '%Y-%m-%d')
-                ps = checkinout.objects.filter(checktime__year=daytoday.year,
-                                               checktime__month=daytoday.month,
-                                               checktime__day=daytoday.day) \
-                    .values('pin') \
-                    .annotate(last=Max('checktime'), fast=Min('checktime'), count=Count('userid'))
-                # print(ps)
+    # Todo 根据排班表提取当时数据
+    ps = checkinout.objects.filter(checktime__range=[datestart, dateend]) \
+        .values_list('id', 'pin', 'checktime')\
+        .order_by('checktime')
+    for pb in emppbs:
+        if pb['id'] != 0:
+            # print(pb['id'])
+            daytoday = pb['daycheck']
+            for checkt in ps:
+                if (pb['pin'] == checkt[1]):
+                    pass
+                    # print(checkt)
+                    # print(pb['daycheck'])
+                    # print(checkt[2])
 
-        # 找到对应数据，计算规所需的对应源数据
-        # 使用源数据，核对规则
-        # 计算出结果并保存进表格
-    return HttpResponse(k.query)
+    # 找到对应数据，计算规所需的对应源数据
+    # 使用源数据，核对规则
+    # 计算出结果并保存进表格
+
+    return HttpResponse(emppbs)
