@@ -17,7 +17,8 @@ class holiday(models.Model):
     holidayname = models.CharField(max_length=20, verbose_name='节日名')
     starttime = models.DateField(verbose_name='开始日期')
     duration = models.IntegerField(default=1, verbose_name='持续天数')
-    holidaytype = models.IntegerField(default=2, verbose_name='日期类型')
+    # 工作日为0，公休日1，节假日2
+    holidaytype = models.IntegerField(default=2, verbose_name='类型')
     quotient = models.IntegerField(default=2, verbose_name='系数')
 
     class Meta:
