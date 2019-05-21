@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.db.models import Max, Min, Count
 
-from attendance.models import extemployeeatt, classlist, classes, classsolt, timesolt, checkinout
+from attendance.models import extemployeeatt, holiday, classlist, classes, classsolt, timesolt, checkinout
 from hr.models import employee
 
 import datetime
@@ -221,7 +221,7 @@ def getmssql(request):
     conn = pymssql.connect(server, user, password, database='db_att2000')
 
     cursor = conn.cursor()
-    cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-1'")
+    cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-11'")
     # cursor.execute("select * from CHECKINOUT")
     row = cursor.fetchone()
     crows = []
@@ -297,10 +297,10 @@ def getmssqlpin(request):
 
 def cmpcheck(request):
     employeeid =7
-    checkday = datetime.datetime.strptime('2019-5-1', '%Y-%m-%d')
+    checkday = datetime.datetime.strptime('2019-4-1', '%Y-%m-%d')
 
-    datestart = datetime.datetime.strptime('2019-5-1', '%Y-%m-%d')
-    dateend = datetime.datetime.strptime('2019-5-30', '%Y-%m-%d')
+    datestart = datetime.datetime.strptime('2019-4-1', '%Y-%m-%d')
+    dateend = datetime.datetime.strptime('2019-4-30', '%Y-%m-%d')
 
     # 计算步骤
     # 计算排班
@@ -316,7 +316,7 @@ def cmpcheck(request):
                 'classid__classsolt__timesoltid_id',
                 'classid__classsolt__timesoltid_id__name',
                 'classid__classsolt__timesoltid_id__intime')\
-        .order_by('datestart')
+        .order_by('employeeid', 'datestart')
 
     timequery = timesolt.objects.all().values()
     timedicts = {}
@@ -326,13 +326,12 @@ def cmpcheck(request):
     # 根据排班规则自动排班
     emppbs = []
     for i in k:
-        print(i)
+        # print(i)
         e = i['datestart'].strftime("%Y-%m-%d")
         sr = datetime.datetime.strptime(e, "%Y-%m-%d")
 
         e = i['dateend'].strftime("%Y-%m-%d")
         sp = datetime.datetime.strptime(e, "%Y-%m-%d")
-
 
         thisdate = datestart
         while thisdate <= dateend:
@@ -342,18 +341,24 @@ def cmpcheck(request):
             pb['pin'] = i['employeeid__extemployeeatt__pin']
             pb['weekday'] = thisdate.weekday()
             if (thisdate >= sr)and(thisdate <= sp):
-                # 根据周末数据，校正周末排班
-                if (thisdate.weekday() == 5) or (thisdate.weekday() == 6):
-                    pb['id'] = 0
-                else:
-                    pb.update(timedicts[i['classid__classsolt__timesoltid_id']])
-                # Todo 根据节假日数据，校正节假日排班
-                pass
+                pb['id'] = i['classid__classsolt__timesoltid_id']
             else:
                 pb['id'] = 0
             emppbs.append(pb)
-            # print(pb)
             thisdate += datetime.timedelta(days=1)
+
+    # 根据周末数据，校正周末排班
+    # 工作日为0，公休日1，节假日2
+    for pb in emppbs:
+        if (pb['weekday'] == 5) or (pb['weekday'] == 6):
+            pb['id'] = 0
+            pb['quot'] = 1
+        else:
+            # pb.update(timedicts[i['classid__classsolt__timesoltid_id']])
+            pb['quot'] = 0
+        print(pb)
+    # Todo 根据节假日数据，校正节假日排班
+    pass
     print(len(emppbs))
 
     #  根据单据校正打卡规则及时段时间
@@ -363,25 +368,17 @@ def cmpcheck(request):
     ps = checkinout.objects.filter(checktime__range=[datestart, dateend]) \
         .values_list('id', 'pin', 'checktime')\
         .order_by('checktime')
-    ee = []
+    print(len(ps))
+
     for pb in emppbs:
         if pb['id'] != 0:
-            # print(pb['employeeid'], pb['name'], pb['daycheck'], pb['id'])
-            daytoday = pb['daycheck']
-            for checkt in ps:
-                if (pb['daycheck'].strftime("%Y-%m-%d") == checkt[2].strftime("%Y-%m-%d")) and (pb['pin'] == checkt[1]):
-                    # print(checkt[1], pb['daycheck'], checkt[2])
-                    # print(pb['pin'], checkt[1], pb['pin'] == checkt[1])
-                    pass
-                else:
-                    eee = ('<p>%s;%s;%s;%s;%s</p>') % (pb['pin'], checkt[1], pb['daycheck'], checkt[2], (pb['daycheck'].strftime("%Y-%m-%d") == checkt[2].strftime("%Y-%m-%d")))
-                    # print(eee)
-                    ee.append(eee)
-                    # print(checkt[1], pb['daycheck'], checkt[2], (pb['daycheck'].strftime("%Y-%m-%d") == checkt[2].strftime("%Y-%m-%d")))
-    print(ee)
+            pb['ckecktimes'] = []
+            for checkt in ps.filter(checktime__year=pb['daycheck'].year, checktime__month=pb['daycheck'].month, checktime__day=pb['daycheck'].day, pin=pb['pin']):
+                pb['ckecktimes'].append(checkt)
+        print(pb)
 
     # 找到对应数据，计算规所需的对应源数据
     # 使用源数据，核对规则
     # 计算出结果并保存进表格
     # kkk=llll
-    return HttpResponse(ee)
+    return HttpResponse(emppbs)

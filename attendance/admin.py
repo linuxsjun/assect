@@ -1,7 +1,13 @@
 from django.contrib import admin
 
-from attendance.models import classes, classsolt, timesolt, checkinout, classlist
+from attendance.models import holiday, classes, classsolt, timesolt, checkinout, classlist
 # Register your models here.
+
+
+class holiday_Admin(admin.ModelAdmin):
+    list_display = ('holidayname', 'starttime', 'duration', 'holidaytype', 'quotient')
+admin.site.register(holiday, holiday_Admin)
+
 
 class timesolt_Admin(admin.ModelAdmin):
     list_display = ('name', 'instar', 'intime', 'inend', 'incheck', 'inlate', 'inabs', 'outstar', 'outtime', 'outend', 'outcheck', 'outleave', 'outabs', 'ckeckoneall', 'recday', 'recminute', 'lateif', 'latetime', 'sumworkhours', 'adddate', 'moddate' )

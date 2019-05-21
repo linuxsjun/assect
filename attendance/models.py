@@ -12,6 +12,18 @@ class extemployeeatt(models.Model):
         db_table = 'att_extemployeeatt'
 
 
+class holiday(models.Model):
+    # 节日
+    holidayname = models.CharField(max_length=20, verbose_name='节日名')
+    starttime = models.DateField(verbose_name='开始日期')
+    duration = models.IntegerField(default=1, verbose_name='持续天数')
+    holidaytype = models.IntegerField(default=2, verbose_name='日期类型')
+    quotient = models.IntegerField(default=2, verbose_name='系数')
+
+    class Meta:
+        db_table = 'att_holiday'
+
+
 class classlist(models.Model):
     # 员工排班表 Schedule
     employeeid = models.ForeignKey('hr.employee', on_delete=models.CASCADE, verbose_name="员工ID")
