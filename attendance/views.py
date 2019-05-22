@@ -340,10 +340,11 @@ def cmpcheck(request):
             pb['daycheck'] = thisdate
             pb['pin'] = i['employeeid__extemployeeatt__pin']
             pb['weekday'] = thisdate.weekday()
+            pb['autopb'] = True
             if (thisdate >= sr)and(thisdate <= sp):
-                pb['id'] = i['classid__classsolt__timesoltid_id']
+                pb['timesoltid'] = i['classid__classsolt__timesoltid_id']
             else:
-                pb['id'] = 0
+                pb['timesoltid'] = 0
             emppbs.append(pb)
             thisdate += datetime.timedelta(days=1)
 
@@ -351,34 +352,47 @@ def cmpcheck(request):
     # 工作日为0，公休日1，节假日2
     for pb in emppbs:
         if (pb['weekday'] == 5) or (pb['weekday'] == 6):
-            pb['id'] = 0
+            pb['timesoltid'] = 0
             pb['quot'] = 1
         else:
             # pb.update(timedicts[i['classid__classsolt__timesoltid_id']])
             pb['quot'] = 0
-        print(pb)
-    # Todo 根据节假日数据，校正节假日排班
-    pass
-    print(len(emppbs))
+        # print(pb)
 
-    #  根据单据校正打卡规则及时段时间
+    #  根据节假日数据，校正节假日排班
+    holidays = holiday.objects.filter(starttime__range=[datestart, dateend]).values().order_by('starttime')
+    print(len(holidays))
+    for hday in holidays:
+        firsday = datetime.datetime.strptime(str(hday['starttime']), '%Y-%m-%d')
+        adddays = hday['duration']
+        quotient = hday['quotient']
+        endday = firsday + datetime.timedelta(days=(adddays-1))
+
+        for pb in emppbs:
+            if (pb['daycheck'] >= firsday) and (pb['daycheck'] <= endday):
+                pb['timesoltid'] = 0
+                pb['quot'] = quotient
+
+    # print(len(emppbs))
+
+    # 根据单据校正打卡规则及时段时间
     pass
 
     # 根据排班表提取当时数据
     ps = checkinout.objects.filter(checktime__range=[datestart, dateend]) \
         .values_list('id', 'pin', 'checktime')\
         .order_by('checktime')
-    print(len(ps))
+    # print(len(ps))
 
     for pb in emppbs:
-        if pb['id'] != 0:
+        if pb['timesoltid'] != 0:
             pb['ckecktimes'] = []
             for checkt in ps.filter(checktime__year=pb['daycheck'].year, checktime__month=pb['daycheck'].month, checktime__day=pb['daycheck'].day, pin=pb['pin']):
-                pb['ckecktimes'].append(checkt)
+                pb['ckecktimes'].append(checkt[2])
         print(pb)
 
     # 找到对应数据，计算规所需的对应源数据
     # 使用源数据，核对规则
     # 计算出结果并保存进表格
     # kkk=llll
-    return HttpResponse(emppbs)
+    return HttpResponse("ok")

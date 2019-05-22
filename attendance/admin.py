@@ -5,7 +5,7 @@ from attendance.models import holiday, classes, classsolt, timesolt, checkinout,
 
 
 class holiday_Admin(admin.ModelAdmin):
-    list_display = ('holidayname', 'starttime', 'duration', 'holidaytype', 'quotient')
+    list_display = ('holidayname', 'starttime', 'duration', 'holidaytype', 'quotient', 'active')
 admin.site.register(holiday, holiday_Admin)
 
 
