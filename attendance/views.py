@@ -19,7 +19,7 @@ def attendance(request):
     context['title'] = '签到'
 
     if request.method == "GET":
-        print('get')
+        # print('get')
         if "namecheck" in request.GET:
             pass
         if 'datecheck' in request.GET:
@@ -94,7 +94,7 @@ def attclass(request):
     context['title'] = '班次'
 
     ps = classlist.objects.all()\
-        .values( 'employeeid_id',
+        .values('employeeid_id',
                  'employeeid__name',
                  'employeeid__employee_department__departmentid__name',
                  'employeeid__extemployeeatt__pin',
@@ -105,6 +105,12 @@ def attclass(request):
     context['context'] = ps
 
     return render(request, 'att_class_board.html', context)
+
+
+def attholiday(request):
+    context={}
+    context['title'] = '假期'
+    return render(request, 'att_holiday_board.html', context)
 
 
 def configatt(request):

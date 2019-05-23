@@ -8,6 +8,7 @@ urlpatterns = [
 
     path('attendance/', views.attendance, name='attendance'),
     path('attclass/', views.attclass, name='attclass'),
+    path('holiday/', views.attholiday, name='holiday'),
     path('summary/', views.summary, name='summary'),
     path('att_collect_detail/', views.att_collect_detail, name='collect'),
 

@@ -26,6 +26,9 @@
                 </div>
                 <article class="row">
                     <div class="col-8">
+                        <div class="alert alert-info" role="alert">
+                            注意：排班为第二天生效，按工作日排班设置自动为第二天排班，同一工作日只能有一个班次，可以有多个签到时段！
+                        </div>
                         <div class="card mb-3">
                             <div class="card-header">
                                 <div class="row justify-content-between">
@@ -77,7 +80,7 @@
                         <div class="card mb-3">
                             <div class="card-header">
                                 <div class="row justify-content-between">
-                                    <div class="col-auto"><span class="card-title">排班</span></div>
+                                    <div class="col-auto"><span class="card-title">排班预览</span></div>
                                     <div class="col-auto">
                                         <from class="form-inline">
                                             <label class="col-form-label col-form-label-sm mr-2" for="name">有效日期</label>
@@ -113,7 +116,7 @@
                             <div class="card-header">
                                 <div class="row">
                                     <span class="col mr-auto">
-                                        <span class="card-title">时段</span>
+                                        <span class="card-title">签到时段</span>
                                     </span>
                                     <span class="col-auto">
                                         <i class="fa fa-upload fa-1x"></i>
@@ -234,5 +237,5 @@
 {% endblock %}
 
 {% block jquery %}
-        <script src="/static/js/hr/view_hr_broad.js"></script>
+{#        <script src="/static/js/hr/view_hr_broad.js"></script>#}
 {% endblock jquery%}
