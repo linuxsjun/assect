@@ -92,6 +92,18 @@ def att_collect_detail(request):
 def attclass(request):
     context={}
     context['title'] = '班次'
+
+    ps = classlist.objects.all()\
+        .values( 'employeeid_id',
+                 'employeeid__name',
+                 'employeeid__employee_department__departmentid__name',
+                 'employeeid__extemployeeatt__pin',
+                 'classid__name',
+                 'datestart',
+                 'dateend',
+                 'active').order_by('employeeid_id', 'employeeid__employee_department__departmentid__name', 'datestart')
+    context['context'] = ps
+
     return render(request, 'att_class_board.html', context)
 
 

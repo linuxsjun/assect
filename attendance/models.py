@@ -34,6 +34,7 @@ class classlist(models.Model):
     dateend = models.DateField(blank=True, null=True, verbose_name='结束日期')
     adddate = models.DateTimeField(auto_now_add=True, verbose_name='新建时间')
     moddate = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    active = models.BooleanField(default=True, verbose_name='有效的')
 
     class Meta:
         db_table = 'att_classlist'

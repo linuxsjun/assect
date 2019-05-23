@@ -56,13 +56,13 @@
                         <tbody>
                             {% for item in context %}
                                 <tr>
-                                    <th>{{ item.name | title }}</th>
-                                    <td>{{ item.employee_department__departmentid__name }}</td>
-                                    <td>{{ item.pin| default_if_none:'-' }}</td>
-                                    <td>{{ item.checktime | date:"Y-m-d H:i:s" }}</td>
-                                    <td>{{ item.count| default:"-"}}</td>
-                                    <td>{{ item.sn | default_if_none:'-' }}</td>
-                                    <td>设备</td>
+                                    <th>{{ item.employeeid__name | title }}</th>
+                                    <td>{{ item.employeeid__employee_department__departmentid__name }}</td>
+                                    <td>{{ item.employeeid__extemployeeatt__pin| default_if_none:'-' }}</td>
+                                    <td>{{ item.classid__name | default_if_none:'-' }}</td>
+                                    <td>{{ item.datestart | date:"Y-m-d" }}</td>
+                                    <td>{{ item.dateend | date:"Y-m-d" }}</td>
+                                    <td>{{ item.active | default_if_none:'-' }}</td>
                                 </tr>
                             {% empty %}
                                 <tr>
