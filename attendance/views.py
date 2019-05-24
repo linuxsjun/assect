@@ -314,14 +314,13 @@ def getmssqlpin(request):
 
 
 def cmpcheck(request):
-    employeeid =7
-    checkday = datetime.datetime.strptime('2019-5-1', '%Y-%m-%d')
+    employeeid = 12
+    checkday = datetime.datetime.strptime('2019-4-1', '%Y-%m-%d')
 
-    datestart = datetime.datetime.strptime('2019-5-1', '%Y-%m-%d')
-    dateend = datetime.datetime.strptime('2019-5-30', '%Y-%m-%d')
+    datestart = datetime.datetime.strptime('2019-4-1', '%Y-%m-%d')
+    dateend = datetime.datetime.strptime('2019-4-30', '%Y-%m-%d')
 
-    # ==========================
-
+    # 计算工作日 ==========================
     holidays = holiday.objects.filter(starttime__range=[datestart, dateend]).values().order_by('starttime')
 
     thisdate = datestart
@@ -330,31 +329,53 @@ def cmpcheck(request):
         ee = {}
         ee['employeeid'] = employeeid
         ee['daycheck'] = thisdate
-        # pb['pin'] = i['employeeid__extemployeeatt__pin']
         ee['weekday'] = thisdate.weekday()
         ee['autopb'] = True
+
+        # 周末计算
         if (ee['weekday'] == 5) or (ee['weekday'] == 6):
-            ee['workday'] = True
+            ee['workday'] = False
             ee['quot'] = 1
         else:
-            ee['workday'] = False
+            ee['workday'] = True
             ee['quot'] = 0
         thisdate += datetime.timedelta(days=1)
         ppds.append(ee)
 
+    #  节假日更新
     for hday in holidays:
         firsday = datetime.datetime.strptime(str(hday['starttime']), '%Y-%m-%d')
         adddays = hday['duration']
         quotient = hday['quotient']
         endday = firsday + datetime.timedelta(days=(adddays-1))
-
-        # print(hday)
-
         for pb in ppds:
             if (pb['daycheck'] >= firsday) and (pb['daycheck'] <= endday):
-                # pb['timesoltid'] = 0
+                if quotient == 0:
+                    pb['workday'] = True
+                else:
+                    pb['workday'] = False
                 pb['quot'] = quotient
-            print(pb)
+
+
+    # =======================
+    # 填写班次
+    chcemployee = employee.objects.get(pk=employeeid)
+    k = classlist.objects.filter(employeeid=chcemployee) \
+        .values('id',
+                'employeeid',
+                'employeeid__name',
+                'employeeid__extemployeeatt__pin',
+                'datestart',
+                'dateend')\
+        .order_by('employeeid', 'datestart')
+    print(k)
+
+
+    for pb in ppds:
+        print(pb)
+
+    # =======================
+
 
     # 计算步骤
     # 计算排班
