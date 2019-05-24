@@ -315,10 +315,46 @@ def getmssqlpin(request):
 
 def cmpcheck(request):
     employeeid =7
-    checkday = datetime.datetime.strptime('2019-4-1', '%Y-%m-%d')
+    checkday = datetime.datetime.strptime('2019-5-1', '%Y-%m-%d')
 
-    datestart = datetime.datetime.strptime('2019-4-1', '%Y-%m-%d')
-    dateend = datetime.datetime.strptime('2019-4-30', '%Y-%m-%d')
+    datestart = datetime.datetime.strptime('2019-5-1', '%Y-%m-%d')
+    dateend = datetime.datetime.strptime('2019-5-30', '%Y-%m-%d')
+
+    # ==========================
+
+    holidays = holiday.objects.filter(starttime__range=[datestart, dateend]).values().order_by('starttime')
+
+    thisdate = datestart
+    ppds=[]
+    while thisdate <= dateend:
+        ee = {}
+        ee['employeeid'] = employeeid
+        ee['daycheck'] = thisdate
+        # pb['pin'] = i['employeeid__extemployeeatt__pin']
+        ee['weekday'] = thisdate.weekday()
+        ee['autopb'] = True
+        if (ee['weekday'] == 5) or (ee['weekday'] == 6):
+            ee['workday'] = True
+            ee['quot'] = 1
+        else:
+            ee['workday'] = False
+            ee['quot'] = 0
+        thisdate += datetime.timedelta(days=1)
+        ppds.append(ee)
+
+    for hday in holidays:
+        firsday = datetime.datetime.strptime(str(hday['starttime']), '%Y-%m-%d')
+        adddays = hday['duration']
+        quotient = hday['quotient']
+        endday = firsday + datetime.timedelta(days=(adddays-1))
+
+        # print(hday)
+
+        for pb in ppds:
+            if (pb['daycheck'] >= firsday) and (pb['daycheck'] <= endday):
+                # pb['timesoltid'] = 0
+                pb['quot'] = quotient
+            print(pb)
 
     # 计算步骤
     # 计算排班
@@ -379,7 +415,7 @@ def cmpcheck(request):
 
     #  根据节假日数据，校正节假日排班
     holidays = holiday.objects.filter(starttime__range=[datestart, dateend]).values().order_by('starttime')
-    print(len(holidays))
+    # print(len(holidays))
     for hday in holidays:
         firsday = datetime.datetime.strptime(str(hday['starttime']), '%Y-%m-%d')
         adddays = hday['duration']
@@ -407,7 +443,7 @@ def cmpcheck(request):
             pb['ckecktimes'] = []
             for checkt in ps.filter(checktime__year=pb['daycheck'].year, checktime__month=pb['daycheck'].month, checktime__day=pb['daycheck'].day, pin=pb['pin']):
                 pb['ckecktimes'].append(checkt[2])
-        print(pb)
+        # print(pb)
 
     # 找到对应数据，计算规所需的对应源数据
     # 使用源数据，核对规则
