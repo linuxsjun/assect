@@ -314,7 +314,7 @@ def getmssqlpin(request):
 
 
 def cmpcheck(request):
-    employeeid = 12
+    employeeid = 17
     checkday = datetime.datetime.strptime('2019-4-1', '%Y-%m-%d')
 
     datestart = datetime.datetime.strptime('2019-4-1', '%Y-%m-%d')
@@ -360,18 +360,31 @@ def cmpcheck(request):
     # =======================
     # 填写班次
     chcemployee = employee.objects.get(pk=employeeid)
-    k = classlist.objects.filter(employeeid=chcemployee) \
+    ks = classlist.objects.filter(employeeid=chcemployee) \
         .values('id',
-                'employeeid',
+                'classid',
+                'classid__name',
                 'employeeid__name',
                 'employeeid__extemployeeatt__pin',
                 'datestart',
                 'dateend')\
         .order_by('employeeid', 'datestart')
-    print(k)
+    print(ks)
 
 
     for pb in ppds:
+        thisdate = pb['daycheck']
+        if pb['workday'] and ks:
+            for k in ks:
+                # pb['pin'] = k['employeeid__extemployeeatt__pin']
+                sr = datetime.datetime.strptime(str(k['datestart']), "%Y-%m-%d")
+                sp = datetime.datetime.strptime(str(k['dateend']), "%Y-%m-%d")
+                if (thisdate >= sr) and (thisdate <= sp):
+                    pb['classes'] = k['classid']
+                    pb['classname'] = k['classid__name']
+        else:
+            pb['classes'] = 0
+            pb['classname'] = None
         print(pb)
 
     # =======================

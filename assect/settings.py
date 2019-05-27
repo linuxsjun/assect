@@ -84,12 +84,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'assect',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        # 'HOST': '192.168.8.43',
-        # 'HOST': '172.18.0.32',
+        'USER': 'attuser',
+        'PASSWORD': 'rfgt45',
         'HOST': 'dpsql.test.com',
         'PORT': '5432',
+        'OPTION': {
+            'sslmode': 'require',
+        },
     }
     # 'default': {
     #     'ENGINE': 'django.db.backends.mysql',
