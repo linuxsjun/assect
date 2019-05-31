@@ -51,15 +51,27 @@ def attendance(request):
         p.append(k)
     context['context'] = p
 
-
     d = []
     pindicts= {}
+    # 查找PIN
     emppins = employee.objects.exclude(extemployeeatt__pin=None)\
         .order_by('employee_department__departmentid__name', 'name')\
         .values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
     for emppin in emppins:
         pindicts[emppin['extemployeeatt__pin']] = emppin
 
+    # 查找班次
+    ks = classlist.objects.all() \
+        .values('id',
+                'employeeid',
+                'classid__name',
+                'employeeid__extemployeeatt__pin',
+                'datestart',
+                'dateend') \
+        .order_by('datestart')
+    print(ks)
+
+    # 填写一览
     ps = checkinout.objects.filter(checktime__year=daytoday.year,
                                    checktime__month=daytoday.month,
                                    checktime__day=daytoday.day) \
@@ -73,6 +85,7 @@ def attendance(request):
         i.update(p)
         i['long'] = i['last'] - i['fast']
         d.append(i)
+        print(i)
     context['context2'] = d
     return render(request, 'att_attendance_list.html', context)
 
