@@ -64,6 +64,10 @@ def hr_detailed(request):
 
             ps = employee.objects.filter(pk=empid).values('name',
                                                           'position',
+                                                          'mobile',
+                                                          'email',
+                                                          'address',
+                                                          'telephone',
                                                           'extemployeeatt__pin',
                                                           'userid').first()
 
@@ -94,7 +98,7 @@ def hr_detailed(request):
             context['context'] = ps
 
             print("======")
-            print(ps)
+            print(context)
             return render(request, 'hr_employee_detailed.html', context)
 
     elif request.method == "POST":

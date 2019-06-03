@@ -8,8 +8,8 @@ class hrconfigs(models.Model):
     # 人力资源配置表
     name = models.CharField(max_length=32, null=True, verbose_name='配置名称')
 
-    # class Meta:
-    #     db_table = 'hr_hrconfigs'
+    class Meta:
+        db_table = 'hr_hrconfigs'
 
 
 class department(models.Model):
@@ -22,13 +22,16 @@ class department(models.Model):
     type = models.IntegerField(default=0, verbose_name='组织类型')
     wxsync = models.BooleanField(default=False, verbose_name="同步企业微信")
 
-    # class Meta:
-    #     db_table = 'hr_department'
+    class Meta:
+        db_table = 'hr_department'
 
 
 class employee(models.Model):
     # 员工表employee
     userid = models.CharField(unique=True, max_length=64, verbose_name='用户ID')
+    employeeno = models.CharField(max_length=12, null=True, blank=True, verbose_name='员工编号')
+    entry = models.DateField(null=True, blank=True, verbose_name='入职')
+    leave = models.DateField(null=True, blank=True, verbose_name='离职')
     name = models.CharField(max_length=64, verbose_name='姓名')
     alias = models.CharField(null=True, blank=True, max_length=32, verbose_name='别名')
     department = models.CharField(null=True, blank=True, max_length=256, verbose_name='部门')
@@ -60,8 +63,24 @@ class employee(models.Model):
     wxsync = models.BooleanField(default=0, verbose_name="同步企业微信")
     active = models.BooleanField(default=True, verbose_name='有效的')
 
-    # class Meta:
-    #     db_table = 'hr_employee'
+    class Meta:
+        db_table = 'hr_employee'
+
+
+class extprivate(models.Model):
+    employee_id = models.ForeignKey('employee', to_field='id', on_delete=models.CASCADE, related_name='privateid', verbose_name='员工ID')
+    code = models.CharField(max_length=20, null=True, blank=True, verbose_name='身份证号')
+    nationality = models.CharField(max_length=20, null=True, blank=True, verbose_name='国籍')
+    nation = models.CharField(max_length=20, null=True, blank=True, verbose_name='民族')
+    nationplace = models.CharField(max_length=20, null=True, blank=True, verbose_name='籍贯')
+    birthday = models.DateField(verbose_name='生日')
+    height = models.IntegerField(null=True, blank=True, verbose_name='身高')
+    weight = models.IntegerField(null=True, blank=True, verbose_name='体重')
+    blood = models.CharField(max_length=2, null=True, blank=True, verbose_name='血型')
+    marital = models.BooleanField(default=False, verbose_name='婚姻')
+
+    class Meta:
+        db_table = 'hr_extprivate'
 
 
 class extattr(models.Model):
@@ -75,8 +94,8 @@ class extattr(models.Model):
     value = models.TextField(max_length=256, null=True, blank=True, verbose_name='文本')
     url = models.TextField(max_length=256, null=True, blank=True, verbose_name='网址')
 
-    # class Meta:
-    #     db_table = 'hr_extattr'
+    class Meta:
+        db_table = 'hr_extattr'
 
 
 class employee_department(models.Model):
@@ -85,8 +104,8 @@ class employee_department(models.Model):
     departmentid = models.ForeignKey('department', to_field='pid', on_delete=models.CASCADE, verbose_name='部门ID')
     isleader = models.BooleanField(default=0, verbose_name='负责人')
 
-    # class Meta:
-    #     db_table = 'hr_employee_department'
+    class Meta:
+        db_table = 'hr_employee_department'
 
 
 class user_sign_log(models.Model):
@@ -96,5 +115,5 @@ class user_sign_log(models.Model):
     fromip = models.CharField(max_length=16, verbose_name='来源IP')
     contl = models.CharField(max_length=32, verbose_name='描述或登录方式')
 
-    # class Meta:
-    #     db_table = 'hr_user_sign_log'
+    class Meta:
+        db_table = 'hr_user_sign_log'
