@@ -1,7 +1,7 @@
 import requests, json, time, datetime
 
 from base.models import configs, wxsecret
-from hr.models import employee, department, employee_department
+from hr.models import employee, extattr, department, employee_department
 
 def getToken(agentidnum):
     d = configs.objects.get(pk=1)
@@ -51,7 +51,7 @@ def gethr(department_id = 1,fetch_child = 1):
 
     v = {}
     v['access_token'] = getToken(agentidnum)
-    v['department_id'] =  department_id
+    v['department_id'] = department_id
     v['fetch_child'] = fetch_child
 
     r = requests.get(url, params=v)
@@ -62,14 +62,6 @@ def gethr(department_id = 1,fetch_child = 1):
         d = {}
         for d in t['userlist']:
             # print(d)
-            if 'external_profile' in d:
-                if 'external_attr' in d['external_profile']:
-                    for i in d['external_profile']['external_attr']:
-                        print(type(i))
-                # u_external_profile = str(d['external_profile'])
-                # print(d['name'])
-                # print(d['external_profile'])
-
             try:
                 chkem=None
                 chkem = employee.objects.filter(userid=d['userid'])
@@ -97,8 +89,8 @@ def gethr(department_id = 1,fetch_child = 1):
                 u_order = d['order']
                 if 'external_profile' in d:
                     u_external_profile = str(d['external_profile'])
-                    print(u_name)
-                    print(d['external_profile'])
+                    # print(u_name)
+                    # print(d['external_profile'])
                 else:
                     u_external_profile = None
                 u_qr_code = d['qr_code']
@@ -132,14 +124,31 @@ def gethr(department_id = 1,fetch_child = 1):
                     dt.save()
                 except:
                     pass
-                print(u_name)
-
-                print(d['department'])
-                print(d['is_leader_in_dept'])
+                # print(u_name)
+                #
+                # print(d['department'])
+                # print(d['is_leader_in_dept'])
 
             # 关联员工与部门
             nemp = employee.objects.get(userid=d['userid'])
+            if 'external_profile' in d:
+                if 'external_attr' in d['external_profile']:
+                    for i in d['external_profile']['external_attr']:
+                        if i['type'] == 0:
+                            cc = extattr.objects.get_or_create(empid=nemp,
+                                                               type=i['type'],
+                                                               value=i['text']['value'])
+                        elif i['type'] == 1:
+                            cc = extattr.objects.get_or_create(empid=nemp,
+                                                               type=i['type'],
+                                                               url=i['web']['url'],
+                                                               title=i['web']['title'])
+                        elif i['type'] == 2:
+                            print(2)
+                # if 'external_corp_name' in d['external_profile']:
+                #     print('---------', d['external_profile']['external_corp_name'])
 
+            # 关联员工与部门
             ii = 0
             for dd in d['department']:
                 try:
@@ -148,7 +157,7 @@ def gethr(department_id = 1,fetch_child = 1):
                     pass
                 else:
                     try:
-                        rep = employee_department.objects.filter(employeeid=nemp.userid,departmentid=dep)
+                        rep = employee_department.objects.filter(employeeid=nemp.userid, departmentid=dep)
                     except Exception:
                         pass
                     else:
@@ -156,7 +165,7 @@ def gethr(department_id = 1,fetch_child = 1):
                             pass
                         else:
                             kk = list(d['is_leader_in_dept'])
-                            seds = employee_department(employeeid=nemp,departmentid=dep,isleader=kk[ii])
+                            seds = employee_department(employeeid=nemp, departmentid=dep, isleader=kk[ii])
                             try:
                                 seds.save()
                             except:
@@ -181,7 +190,7 @@ def getdepartment(depid = 1):
     else:
         t = json.loads(r.text)
         if t['errcode'] == 0:
-            d ={}
+            d = {}
             for d in t['department']:
                 dt = department(pid=d['id'],
                                    name=d['name'],

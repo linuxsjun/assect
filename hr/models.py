@@ -86,13 +86,14 @@ class extprivate(models.Model):
 class extattr(models.Model):
     # 扩展属性
     empid = models.ForeignKey('employee', to_field='id', on_delete=models.CASCADE, related_name='employeeid', verbose_name='员工ID')
-    # 类型 0：文本 1：网址
+    # 类型 0：文本 1：网址 2：小程序
     type = models.IntegerField(default=0, verbose_name='类型')
     # 名称
     name = models.TextField(max_length=64, null=True, blank=True, verbose_name='名称')
     # 值
     value = models.TextField(max_length=256, null=True, blank=True, verbose_name='文本')
     url = models.TextField(max_length=256, null=True, blank=True, verbose_name='网址')
+    title = models.CharField(max_length=64, null=True, blank=True, verbose_name='标题')
 
     class Meta:
         db_table = 'hr_extattr'

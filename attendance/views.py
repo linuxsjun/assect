@@ -286,7 +286,7 @@ def getmssql(request):
                                                  workcode=workcode,
                                                  sn=sn,
                                                  userextfmt=userextfmt,
-                                                 pin = uidpin[userid])
+                                                 pin=uidpin[userid])
         m, n = nitem
         if n:
             r += 1
