@@ -287,9 +287,9 @@ def getmssql(request):
                                                  sn=sn,
                                                  userextfmt=userextfmt,
                                                  pin = uidpin[userid])
-        r += 1
-        print(r)
-
+        m, n = nitem
+        if n:
+            r += 1
     return HttpResponse(" 更新记录:" + str(r))
 
 
@@ -368,7 +368,6 @@ def cmpcheck(request):
                 else:
                     pb['workday'] = False
                 pb['quot'] = quotient
-
 
     # =======================
     # 填写班次
