@@ -129,8 +129,8 @@ def gethr(department_id = 1,fetch_child = 1):
                 # print(d['department'])
                 # print(d['is_leader_in_dept'])
 
-            # 关联员工与部门
             nemp = employee.objects.get(userid=d['userid'])
+            # 关联员工与
             if 'external_profile' in d:
                 if 'external_attr' in d['external_profile']:
                     for i in d['external_profile']['external_attr']:
