@@ -21,55 +21,45 @@ def attendance(request):
     if request.method == "GET":
         # print('get')
         if "namecheck" in request.GET:
-            pass
+            employeename = request.GET['namecheck']
+            if employeename == '':
+                pass
         if 'datecheck' in request.GET:
             datecheck = request.GET['datecheck']
             daytoday = datetime.datetime.strptime(datecheck, '%Y-%m-%d')
         else:
             daytoday = datetime.datetime.today()
         if 'departmentcheck' in request.GET:
-            pass
+            department = request.GET['departmentcheck']
+            if department == '':
+                pass
         if 'getdays' in request.GET:
             pass
 
     context['daytoday'] = daytoday
 
-    ps = checkinout.objects.filter(checktime__year=daytoday.year,
-                                   checktime__month=daytoday.month,
-                                   checktime__day=daytoday.day,
-                                   pin=32).values().order_by('-checktime')
-    emppins = employee.objects.exclude(extemployeeatt__pin=None).order_by('employee_department__departmentid__name', 'name').values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
-    pinsdict = {}
-    for i in emppins:
-        pinsdict[i['extemployeeatt__pin']] = i
-        del pinsdict[i['extemployeeatt__pin']]['extemployeeatt__pin']
-    p = []
-    for k in ps:
-        if k['pin']:
-            if k['pin'] in pinsdict:
-                k.update(pinsdict[k['pin']])
-        p.append(k)
-    context['context'] = p
-
     d = []
     pindicts= {}
     # 查找PIN
-    emppins = employee.objects.exclude(extemployeeatt__pin=None)\
+    # emppins = employee.objects.all() \
+    emppins = employee.objects.exclude(extemployeeatt__pin=None) \
         .order_by('employee_department__departmentid__name', 'name')\
         .values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
+    print(len(emppins))
     for emppin in emppins:
         pindicts[emppin['extemployeeatt__pin']] = emppin
+        print(emppin)
 
-    # 查找班次
-    ks = classlist.objects.all() \
-        .values('id',
-                'employeeid',
-                'classid__name',
-                'employeeid__extemployeeatt__pin',
-                'datestart',
-                'dateend') \
-        .order_by('datestart')
-    print(ks)
+    # # 查找班次
+    # ks = classlist.objects.all() \
+    #     .values('id',
+    #             'employeeid',
+    #             'classid__name',
+    #             'employeeid__extemployeeatt__pin',
+    #             'datestart',
+    #             'dateend') \
+    #     .order_by('datestart')
+    # print(ks)
 
     # 填写一览
     ps = checkinout.objects.filter(checktime__year=daytoday.year,
@@ -85,8 +75,29 @@ def attendance(request):
         i.update(p)
         i['long'] = i['last'] - i['fast']
         d.append(i)
-        print(i)
+        # print(i)
     context['context2'] = d
+
+    # ps = checkinout.objects.filter(checktime__year=daytoday.year,
+    #                                checktime__month=daytoday.month,
+    #                                checktime__day=daytoday.day,
+    #                                pin=32).values().order_by('-checktime')
+    # emppins = employee.objects.exclude(extemployeeatt__pin=None)\
+    #     .order_by('employee_department__departmentid__name', 'name')\
+    #     .values('name', 'extemployeeatt__pin', 'employee_department__departmentid__name')
+    # pinsdict = {}
+    # for i in emppins:
+    #     pinsdict[i['extemployeeatt__pin']] = i
+    #     del pinsdict[i['extemployeeatt__pin']]['extemployeeatt__pin']
+    # p = []
+    # for k in ps:
+    #     if k['pin']:
+    #         if k['pin'] in pinsdict:
+    #             k.update(pinsdict[k['pin']])
+    #     p.append(k)
+    # context['context'] = p
+
+
     return render(request, 'att_attendance_list.html', context)
 
 

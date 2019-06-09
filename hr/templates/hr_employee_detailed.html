@@ -272,6 +272,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="identity">有效时间</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" type="text" name="identity" id="identity" value="{{ context.identity|date:'Y-m-d' }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row mx-3 mb-2">
                                                         <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="nationality">国籍</label>
                                                         <div class="col-sm-4">
                                                             <input class="form-control" type="text" name="nationality" id="nationality" value="{{ context.nationality|default:'' }}">
@@ -289,6 +295,27 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">私人联系</h5>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="identity">家庭地址</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" type="text" name="identity" id="identity" value="{{ context.identity|date:'Y-m-d' }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="identity">个人邮箱</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" type="text" name="identity" id="identity" value="{{ context.identity|date:'Y-m-d' }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row mx-3 mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="native">即时通讯</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" type="text" name="native" id="native" value="{{ context.native|date:'Y-m-d' }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
                                                     <h5 class="text-info pl-3">亲属信息</h5>
                                                     <div class="row mx-3 mb-2">
                                                         <div class="col-12 pl-3">
@@ -297,20 +324,20 @@
                                                                     <tr>
                                                                         <th scope="col">姓名</th>
                                                                         <th scope="col">关系</th>
-                                                                        <th scope="col">年龄</th>
                                                                         <th scope="col">工作单位</th>
                                                                         <th scope="col">职务</th>
                                                                         <th scope="col">电话</th>
+                                                                        <th scope="col">紧急联系人</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
                                                                         <th><p class="mb-0">XXXXX</p></th>
-                                                                        <td>漱口英语</td>
-                                                                        <td>英语</td>
-                                                                        <td>三级英语证书</td>
-                                                                        <td>三级英语证书</td>
-                                                                        <td>三级英语证书</td>
+                                                                        <td>父亲</td>
+                                                                        <td>XXXXXXX</td>
+                                                                        <td>XX</td>
+                                                                        <td>59888688</td>
+                                                                        <td class="text-center">是</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -382,6 +409,7 @@
                                                                 <select class="form-control" id="marital" name="marital">
                                                                     <option value="1" selected="selected">未婚</option>
                                                                     <option value="2">已婚</option>
+                                                                    <option value="2">离异</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -598,6 +626,113 @@
                                                             <div class="input-group-append">
                                                                  <button class="btn btn-outline-secondary" type="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                                              </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row mb-2">
+                                                        <label class="col-sm-2 col-form-label text-left text-sm-right">员工类型</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group">
+                                                                <select class="form-control" id="user" name="user">
+                                                                    <option value="0" selected="selected">全职员工</option>
+                                                                    <option value="0" selected="selected">兼职</option>
+                                                                    <option value="0" selected="selected">劳务</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="name">试用期</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="date" name="address" id="address" value="">
+                                                        </div>
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="name">离职日期</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="date" name="address" id="address" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info pl-3">协议</h5>
+                                                    <div class="row mx-3 mb-2">
+                                                        <div class="col-12 pl-3">
+                                                            <table class="table table-hover table-sm border-bottom">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                        <th scope="col">起止</th>
+                                                                        <th scope="col">止</th>
+                                                                        <th scope="col">类型</th>
+                                                                        <th scope="col">名称</th>
+                                                                        <th scope="col" class="text-right">附件</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th>2013-2</th>
+                                                                        <th>2013-5</th>
+                                                                        <td>协议</td>
+                                                                        <td>保密协议</td>
+                                                                        <td class="text-right"><i class="fa fa-paperclip" aria-hidden="true" data-id="0"></i>  1</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>2013-2</th>
+                                                                        <th>2013-5</th>
+                                                                        <td>合同</td>
+                                                                        <td>劳动合同</td>
+                                                                        <td class="text-right"><i class="fa fa-paperclip" aria-hidden="true" data-id="0"></i>  2</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <h5 class="text-info">薪酬计算</h5>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="noid">基本工资</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group" >
+                                                                <input class="form-control" type="text" name="noid" id="noid" list="indexname" value="底薪 + 补贴" placeholder="(自动编号)">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="noid">绩效工资</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group" >
+                                                                <input class="form-control" type="text" name="noid" id="noid" list="indexname" value="" placeholder="(自动编号)">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="noid">提成/计件</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group" >
+                                                                <input class="form-control" type="text" name="noid" id="noid" list="indexname" value="" placeholder="(自动编号)">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="noid">保险基数</label>
+                                                        <div class="col-sm-4">
+                                                            <div class="input-group" >
+                                                                <input class="form-control" type="text" name="noid" id="noid" list="indexname" value="" placeholder="(自动编号)">
+                                                            </div>
+                                                        </div>
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="noid">社保编号</label>
+                                                        <div class="col-sm-4">
+                                                            <div class="input-group" >
+                                                                <input class="form-control" type="text" name="noid" id="noid" list="indexname" value="" placeholder="(自动编号)">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group form-row col-sm mb-2">
+                                                        <label class="col-sm-2 col-form-label text-right pr-3 border-right" for="noid">公积金</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group" >
+                                                                <input class="form-control" type="text" name="noid" id="noid" list="indexname" value="" placeholder="(自动编号)">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

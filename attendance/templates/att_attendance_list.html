@@ -19,10 +19,10 @@
                             <form class="form-inline mb-2" action=" {% url 'attendance:attendance' %}" method="get" >
                                 <label class="col-form-label mr-2" for="datecheck">日期</label>
                                 <input class="form-control mr-2" type="date" name="datecheck" id="datecheck" value="{{ daytoday| date:"Y-m-d" }}">
-                                <label class="col-form-label mr-2" for="departmentcheck">部门</label>
-                                <input class="form-control mr-2" type="text" name="departmentcheck" id="departmentcheck" value="">
-                                <label class="col-form-label mr-2" for="namecheck">姓名</label>
-                                <input class="form-control mr-2" type="text" name="namecheck" id="namecheck" value="">
+                                <label class="col-form-label mr-2 sr-only" for="departmentcheck">部门</label>
+                                <input class="form-control mr-2" type="text" name="departmentcheck" id="departmentcheck" value="" placeholder="(部门)">
+                                <label class="col-form-label mr-2 sr-only" for="namecheck">姓名</label>
+                                <input class="form-control mr-2" type="text" name="namecheck" id="namecheck" value="" placeholder="(人员)">
                                 <button type="submit" class="btn btn-primary mr-2" data-toggle="query">查询</button>
                             </form>
                         </div>
