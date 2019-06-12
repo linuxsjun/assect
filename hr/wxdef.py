@@ -65,12 +65,46 @@ def gethr(department_id = 1,fetch_child = 1):
             try:
                 chkem=None
                 chkem = employee.objects.filter(userid=d['userid'])
+
             except Exception:
                 print('chkem error')
                 pass
+
             if chkem:
                 #记录已存在
-                pass
+                l = employee.objects.get(userid=d['userid'])
+
+                l.userid = d['userid']
+                u_name = d['name']
+                l.position = d['position']
+                u_mobile = d['mobile']
+                u_gender = d['gender']
+                l.email = d['email']
+                l.avatar = d['avatar']
+                u_status = d['status']
+                u_enable = d['enable']
+                u_isleader = d['isleader']
+                u_extattr = d['extattr']
+                u_hide_mobile = d['hide_mobile']
+                u_english_name = d['english_name']
+                l.telephone = d['telephone']
+                u_order = d['order']
+                if 'external_profile' in d:
+                    l.external_profile = str(d['external_profile'])
+                    # print(u_name)
+                    # print(d['external_profile'])
+                else:
+                    l.external_profile = None
+                u_qr_code = d['qr_code']
+                u_alias = d['alias']
+                if 'address' in d:
+                    l.address = d['address']
+                else:
+                    l.address = None
+
+                print(l.email)
+                l.save()
+
             else:
                 u_userid = d['userid']
                 u_name = d['name']
@@ -123,6 +157,7 @@ def gethr(department_id = 1,fetch_child = 1):
                 try:
                     dt.save()
                 except:
+                    print('no')
                     pass
                 # print(u_name)
                 #
