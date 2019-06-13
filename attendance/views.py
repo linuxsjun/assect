@@ -260,11 +260,10 @@ def checkeveryday(request):
 
 def getmssql(request):
     if request.method == "POST":
-        print('POST')
         if "days" in request.POST:
             days = request.POST['days']
             days = int(days)
-            dayfrom = datetime.datetime.today() - datetime.timedelta(days=days-1)
+            dayfrom = datetime.datetime.today() - datetime.timedelta(days=days)
 
     dbsql = msslqdb.getmssqldb()
     conn = pymssql.connect(dbsql['server'], dbsql['user'], dbsql['password'], database=dbsql['database'])
