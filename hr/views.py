@@ -27,11 +27,11 @@ def hr_list(request):
             signuser = employee.objects.get(session=username)
         except Exception:
             context['userinfo'] = '用户'
-            return render(request, 'sign.html', context)
+            return redirect('/sign/')
         context['userinfo'] = signuser.name
     else:
         context['userinfo'] = '用户'
-        return render(request, 'sign.html', context)
+        return redirect('/sign/')
 
     # d = base_conf.objects.all().first()
     # ps = hr_department.objects.all().order_by('parentid','order')

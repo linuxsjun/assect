@@ -11,8 +11,6 @@ from hr.models import employee, user_sign_log
 
 def index(request):
     context = {}
-
-
     username = request.COOKIES.get('usercookie', None)
     if username:
         try:
@@ -87,7 +85,7 @@ def sign_view(request):
                 users = employee.objects.filter(userid=seluser)
                 if users:
                     u = users.first()
-                    rnd = seluser + str(time.time()) + str(random.randint(10000,20000))
+                    rnd = seluser + str(time.time()) + str(random.randint(10000, 20000))
                     strsession = hashlib.md5()
                     strsession.update(rnd.encode('utf-8'))
                     s = strsession.hexdigest()

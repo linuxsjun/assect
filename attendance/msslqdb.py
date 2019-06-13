@@ -1,5 +1,3 @@
-import pymssql
-
 def getmssqldb():
     dbsql={}
     dbsql['server'] = 'dba.jtanimation.com'

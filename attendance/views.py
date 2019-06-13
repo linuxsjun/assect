@@ -6,7 +6,6 @@ from hr.models import employee
 
 from . import msslqdb
 
-import pymssql
 import datetime
 import time
 import threading
@@ -23,21 +22,21 @@ def attendance(request):
 
     if request.method == "GET":
         # print('get')
-        if "namecheck" in request.GET:
-            employeename = request.GET['namecheck']
-            if employeename == '':
-                pass
         if 'datecheck' in request.GET:
             datecheck = request.GET['datecheck']
             daytoday = datetime.datetime.strptime(datecheck, '%Y-%m-%d')
         else:
             daytoday = datetime.datetime.today()
+
+        if "namecheck" in request.GET:
+            employeename = request.GET['namecheck']
+            if employeename == '':
+                pass
+
         if 'departmentcheck' in request.GET:
             department = request.GET['departmentcheck']
             if department == '':
                 pass
-        if 'getdays' in request.GET:
-            pass
 
     context['daytoday'] = daytoday
 
@@ -259,9 +258,13 @@ def checkeveryday(request):
 
 
 def getmssql(request):
+    import pymssql
+
     if request.method == "POST":
         if "days" in request.POST:
+            # days = request.POST.get('days', '1')
             days = request.POST['days']
+
             days = int(days)
             dayfrom = datetime.datetime.today() - datetime.timedelta(days=days)
 
@@ -309,6 +312,8 @@ def getmssql(request):
 
 
 def getmssqlpin(request):
+    import pymssql
+
     dbsql = msslqdb.getmssqldb()
     conn = pymssql.connect(dbsql['server'], dbsql['user'], dbsql['password'], database=dbsql['database'])
 

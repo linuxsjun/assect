@@ -1,4 +1,7 @@
-import requests, json, time, datetime
+import requests
+import json
+import time
+import datetime
 
 from base.models import configs, wxsecret
 from hr.models import employee, extattr, department, employee_department
