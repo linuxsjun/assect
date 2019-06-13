@@ -34,11 +34,11 @@
                                     <span class="runstatus">获取记录</span>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="run dropdown-item" href="#">获取记录(1d)</a>
-                                    <a class="run dropdown-item" href="#">获取记录(3d)</a>
-                                    <a class="run dropdown-item" href="#">获取记录(7d)</a>
-                                    <a class="run dropdown-item" href="#">获取记录(30d)</a>
-                                    <a class="run dropdown-item" href="#">获取记录(60d)</a>
+                                    <a class="run dropdown-item" href="#" data-action="1">获取记录(1d)</a>
+                                    <a class="run dropdown-item" href="#" data-action="3">获取记录(3d)</a>
+                                    <a class="run dropdown-item" href="#" data-action="7">获取记录(7d)</a>
+                                    <a class="run dropdown-item" href="#" data-action="30">获取记录(30d)</a>
+                                    <a class="run dropdown-item" href="#" data-action="60">获取记录(60d)</a>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +61,6 @@
                                 <th class="border-right" data-id="sn">审批单<i class="" aria-hidden="true" data-id="0"></i></th>
                                 <th class="border-right" data-id="sn">状态<i class="" aria-hidden="true" data-id="0"></i></th>
                                 <th class="text-right" data-id="act"><i class="fa fa-align-justify" aria-hidden="true" data-id="0"></i></th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -141,14 +140,17 @@
 {% block jquery %}
     <script type="text/javascript">
         $(document).ready(function(){
-            $(".run").click(function () {
+            $(".run").click(function(){
                 $('.runstatus').toggleClass('sr-only');
                 $('#btnGroupDrop1').attr("disabled", "1");
-                $.get(
+                days = $(this).attr('data-action');
+                $.post(
                     "/att/getmssql/",
-                    function (data) {
+                    {'days': days},
+                    function(data){
                         $('.runstatus').toggleClass('sr-only');
                         $('#btnGroupDrop1').removeAttr("disabled");
+                        console.log(data)
                     });
             });
 

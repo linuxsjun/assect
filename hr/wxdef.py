@@ -71,13 +71,14 @@ def gethr(department_id = 1,fetch_child = 1):
                 pass
 
             if chkem:
+                # Todo 略过
                 #记录已存在
                 l = employee.objects.get(userid=d['userid'])
 
                 l.userid = d['userid']
                 u_name = d['name']
                 l.position = d['position']
-                u_mobile = d['mobile']
+                l.mobile = d['mobile']
                 u_gender = d['gender']
                 l.email = d['email']
                 l.avatar = d['avatar']
@@ -101,10 +102,7 @@ def gethr(department_id = 1,fetch_child = 1):
                     l.address = d['address']
                 else:
                     l.address = None
-
-                print(l.email)
                 l.save()
-
             else:
                 u_userid = d['userid']
                 u_name = d['name']
@@ -172,16 +170,19 @@ def gethr(department_id = 1,fetch_child = 1):
                         if i['type'] == 0:
                             cc = extattr.objects.get_or_create(empid=nemp,
                                                                type=i['type'],
+                                                               name=i['name'],
                                                                value=i['text']['value'])
                         elif i['type'] == 1:
                             cc = extattr.objects.get_or_create(empid=nemp,
                                                                type=i['type'],
+                                                               name = i['name'],
                                                                url=i['web']['url'],
                                                                title=i['web']['title'])
                         elif i['type'] == 2:
                             print(2)
-                # if 'external_corp_name' in d['external_profile']:
-                #     print('---------', d['external_profile']['external_corp_name'])
+                        pass
+                if 'external_corp_name' in d['external_profile']:
+                    print('---------', d['external_profile']['external_corp_name'])
 
             # 关联员工与部门
             ii = 0

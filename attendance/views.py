@@ -4,6 +4,9 @@ from django.db.models import Max, Min, Count
 from attendance.models import extemployeeatt, holiday, classlist, classes, classsolt, timesolt, checkinout
 from hr.models import employee
 
+from . import msslqdb
+
+import pymssql
 import datetime
 import time
 import threading
@@ -256,22 +259,24 @@ def checkeveryday(request):
 
 
 def getmssql(request):
-    import pymssql
-    server = 'dba.jtanimation.com'
-    user = 'attsql'
-    password = 'qweasd123'
-    conn = pymssql.connect(server, user, password, database='db_att2000')
+    if request.method == "POST":
+        print('POST')
+        if "days" in request.POST:
+            days = request.POST['days']
+            days = int(days)
+            dayfrom = datetime.datetime.today() - datetime.timedelta(days=days-1)
+
+    dbsql = msslqdb.getmssqldb()
+    conn = pymssql.connect(dbsql['server'], dbsql['user'], dbsql['password'], database=dbsql['database'])
 
     cursor = conn.cursor()
-    cursor.execute("select * from CHECKINOUT where CHECKTIME >='2019-05-11'")
-    # cursor.execute("select * from CHECKINOUT")
+    strsql = "select * from CHECKINOUT where CHECKTIME >='" + dayfrom.strftime("%Y-%m-%d") + "'"
+    cursor.execute(strsql)
     row = cursor.fetchone()
     crows = []
     while row:
         crows.append(row)
         row = cursor.fetchone()
-
-    print(len(crows))
 
     cursor = conn.cursor()
     cursor.execute('select * from userinfo')
@@ -305,11 +310,8 @@ def getmssql(request):
 
 
 def getmssqlpin(request):
-    import pymssql
-    server = 'dba.jtanimation.com'
-    user = 'attsql'
-    password = 'qweasd123'
-    conn = pymssql.connect(server, user, password, database='db_att2000')
+    dbsql = msslqdb.getmssqldb()
+    conn = pymssql.connect(dbsql['server'], dbsql['user'], dbsql['password'], database=dbsql['database'])
 
     cursor = conn.cursor()
     cursor.execute('select * from userinfo')
