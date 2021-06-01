@@ -11,5 +11,5 @@ psycopg2==2.7.7
 pytz==2018.5
 reportlab==3.5.13
 requests==2.21.0
-urllib3==1.24.1
+urllib3==1.26.5
 zope.interface==4.5.0
